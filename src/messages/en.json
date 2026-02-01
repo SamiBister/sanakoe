@@ -1,0 +1,126 @@
+{
+  "start": {
+    "title": "Vocabulary Quiz",
+    "subtitle": "Practice your vocabulary words!",
+    "description": "Upload a CSV file or enter words manually to start practicing.",
+    "uploadButton": "Upload CSV",
+    "manualButton": "Enter Manually",
+    "startQuiz": "Start Quiz",
+    "wordCount": "{count, plural, =0 {No words} =1 {1 word} other {# words}} ready"
+  },
+  "upload": {
+    "title": "Upload Word List",
+    "dragDrop": "Drag and drop a CSV file here",
+    "or": "or",
+    "browse": "Browse files",
+    "fileTypes": "Accepted: .csv, .txt",
+    "parsing": "Parsing file...",
+    "success": "File uploaded successfully!",
+    "preview": "Preview (first 5 words):",
+    "error": "Error parsing file",
+    "errorEmpty": "The file appears to be empty",
+    "errorFormat": "Invalid file format. Please upload a CSV with two columns.",
+    "errorColumn": "Each row must have exactly two columns (word and translation)"
+  },
+  "manual": {
+    "title": "Enter Words Manually",
+    "headerWord": "Word",
+    "headerTranslation": "Translation",
+    "clearAll": "Clear All",
+    "clearConfirm": "Are you sure you want to clear all entries?",
+    "validCount": "{count, plural, =0 {No complete pairs} =1 {1 complete pair} other {# complete pairs}}",
+    "instructions": "Fill in both columns. Press Tab to move between cells. New rows are added automatically."
+  },
+  "quiz": {
+    "progress": "{resolved} / {total}",
+    "tries": "{count, plural, =0 {No attempts} =1 {1 attempt} other {# attempts}}",
+    "time": "Time",
+    "submit": "Check",
+    "next": "Next",
+    "correct": {
+      "great": "Great!",
+      "wellDone": "Well done!",
+      "perfect": "Perfect!",
+      "excellent": "Excellent!",
+      "awesome": "Awesome!",
+      "amazing": "Amazing!"
+    },
+    "incorrect": {
+      "notQuite": "Not quite!",
+      "tryAgain": "Let's practice this one!",
+      "almostThere": "Almost there!",
+      "keepGoing": "Keep trying!"
+    },
+    "correctAnswerIs": "The correct answer is:",
+    "yourAnswer": "Your answer",
+    "promptLabel": "Translate this word"
+  },
+  "practice": {
+    "title": "Practice Mode",
+    "instruction": "Type the correct answer 3 times to practice:",
+    "counter": "{current} / {total}",
+    "correctAnswerLabel": "Correct answer:",
+    "keepGoing": "Keep going!",
+    "good": "Good!",
+    "excellent": "Excellent!",
+    "wellDone": "Well done! Let's continue with the next word.",
+    "typeHere": "Type here..."
+  },
+  "results": {
+    "title": "Quiz Complete!",
+    "congratulations": "Congratulations!",
+    "summary": "Here's how you did:",
+    "totalWords": "Total words",
+    "totalTries": "Total attempts",
+    "totalTime": "Total time",
+    "wordsNotFirstTry": "Words that needed practice:",
+    "noMistakes": "Perfect! You got all words right on the first try!",
+    "newRecord": "🎉 New Record!",
+    "newRecordTries": "New best: Fewer attempts!",
+    "newRecordTime": "New best: Faster time!",
+    "motivationFewer": "Great job! Can you solve them all on the first try next time?",
+    "motivationFaster": "Nice! Want to try even faster?",
+    "motivationBoth": "Amazing! You're getting better and better!",
+    "restart": "Restart Quiz",
+    "newList": "New Word List",
+    "previousBest": "Previous best",
+    "currentScore": "Your score"
+  },
+  "wordList": {
+    "button": "Word List",
+    "title": "All Words",
+    "status": {
+      "resolved": "Resolved",
+      "unresolved": "Unresolved",
+      "mistake": "Mistake made"
+    },
+    "statusEmoji": {
+      "resolved": "✅",
+      "unresolved": "🔁",
+      "mistake": "⚠️"
+    },
+    "filter": {
+      "all": "All",
+      "unresolved": "Unresolved",
+      "mistakes": "Mistakes"
+    },
+    "current": "(current)",
+    "empty": "No words loaded yet",
+    "close": "Close"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fi": "Suomi"
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

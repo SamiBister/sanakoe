@@ -1,0 +1,49 @@
+{
+  "name": "sanakoe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Language Quiz for Kids - A fun vocabulary learning app",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "education",
+    "vocabulary",
+    "quiz",
+    "kids",
+    "language-learning"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nanoid": "^5.1.6",
+    "next": "^16.1.6",
+    "next-intl": "^4.8.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.2.0",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.24",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6",
+    "jest": "^30.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "ts-jest": "^29.4.6",
+    "typescript": "^5.9.3"
+  }
+}
