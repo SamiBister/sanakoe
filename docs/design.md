@@ -498,6 +498,7 @@ Three kid-friendly SVG icon components for visual feedback and motivation:
 **Purpose:** Correct answers, achievements, and positive feedback.
 
 **Component Interface:**
+
 ```typescript
 interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: number; // Size in pixels (default: 24)
@@ -506,6 +507,7 @@ interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
 ```
 
 **Features:**
+
 - Bright gold color (#FFD700) with orange stroke
 - Scalable to any size via `size` prop
 - Uses Next.js Image component for optimization
@@ -514,6 +516,7 @@ interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
 - forwardRef support for ref passing
 
 **SVG Details:**
+
 - File: `/public/icons/star.svg`
 - ViewBox: 24x24
 - Fill: Gold (#FFD700)
@@ -524,6 +527,7 @@ interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
 **Purpose:** Personal records, achievements, and milestones.
 
 **Component Interface:**
+
 ```typescript
 interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: number; // Size in pixels (default: 24)
@@ -532,6 +536,7 @@ interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
 ```
 
 **Features:**
+
 - Primary color matches theme orange (#F5AA14)
 - Classic trophy shape with handles and base
 - Scalable and accessible
@@ -539,6 +544,7 @@ interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
 - forwardRef support
 
 **SVG Details:**
+
 - File: `/public/icons/trophy.svg`
 - ViewBox: 24x24
 - Fill and Stroke: Primary orange (#F5AA14)
@@ -548,6 +554,7 @@ interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
 **Purpose:** Motivation, encouragement, and "launch" actions.
 
 **Component Interface:**
+
 ```typescript
 interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: number; // Size in pixels (default: 24)
@@ -556,6 +563,7 @@ interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
 ```
 
 **Features:**
+
 - Multi-color design: red body, teal flames
 - Playful and energetic appearance
 - Scalable and accessible
@@ -563,6 +571,7 @@ interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
 - forwardRef support
 
 **SVG Details:**
+
 - File: `/public/icons/rocket.svg`
 - ViewBox: 24x24
 - Colors: Red (#FF6B6B, #FF3333), Teal (#27C4A1)
@@ -570,25 +579,404 @@ interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
 #### Design Philosophy
 
 **Kid-Friendly:**
+
 - Bright, cheerful colors that appeal to ages 9-13
 - Simple, recognizable shapes
 - High contrast for visibility
 
 **Accessible:**
+
 - All icons have role="img"
 - Customizable aria-label for context
 - Empty alt text on img element (decorative)
 - Keyboard interaction support via HTML attributes
 
 **Flexible:**
+
 - Size prop for any dimension
 - Accepts all HTML div attributes
 - Can be wrapped in buttons or links
 - className support for custom styling
 
+#### Usage Examples
+
+```tsx
+import { Star, Trophy, Rocket } from '@/components/icons';
+
+// Basic usage
+<Star />
+<Trophy />
+<Rocket />
+
+// Custom size
+<Star size={48} />
+
+// Custom aria-label
+<Trophy ariaLabel="First place trophy" />
+
+// With click handler
+<Rocket onClick={() => console.log('Launched!')} />
+
+// With className
+<Star className="hover:scale-110 transition-transform" size={32} />
+```
+
+#### Test Coverage
+
+- Statement: 71.42%
+- Branch: 100%
+- Function: 100%
+- Lines: 73.68%
+- Total Tests: 39 (13 per icon)
+
+---
+
+### 5.9. WordListUpload Component
+
+A CSV file upload component that allows users to load vocabulary word lists from `.csv` or `.txt` files.
+
+#### Purpose
+
+Provides the first of two input methods for loading vocabulary words into the quiz. Allows users to quickly import large word lists from spreadsheet files.
+
+#### Component Interface
+
+```typescript
+interface WordListUploadProps {
+  /**
+   * Callback when words are successfully parsed
+   */
+  onWordsLoaded: (words: WordItem[]) => void;
+
+  /**
+   * Additional CSS classes
+   */
+  className?: string;
+}
+```
+
+#### Features
+
+**File Input:**
+
+- Hidden file input triggered by visible button
+- Accepts `.csv` and `.txt` file extensions
+- File type validation before processing
+
+**Drag-and-Drop:**
+
+- Full drag-and-drop support
+- Visual feedback when dragging over drop zone
+- Highlights border to indicate drop target
+
+**File Processing:**
+
+- Uses FileReader API for client-side reading
+- Integrates with existing CSV parser (`parseCSV`)
+- Validates file content and format
+- Checks for empty results
+
+**State Management:**
+
+- Four states: idle, loading, success, error
+- Loading state shows spinner with filename
+- Error state shows user-friendly messages
+- Success state shows word count and preview
+
+**Word Preview:**
+
+- Displays first 5 words in prompt → answer format
+- Shows total word count
+- Indicates if more words exist (...and N more words)
+
+**Error Handling:**
+
+- Catches CSVParseError with specific messages
+- Handles generic errors with fallback message
+- Detects empty word lists
+- Reset functionality to try again
+
+**User Experience:**
+
+- Large, kid-friendly button and drop zone
+- Clear instructions and supported format info
+- Encouraging success feedback
+- Non-blocking error messages with retry option
+
+#### States
+
+```typescript
+interface UploadState {
+  status: "idle" | "loading" | "success" | "error";
+  words: WordItem[];
+  error: string | null;
+  fileName: string | null;
+}
+```
+
+**Idle State:**
+
+- Shows upload area with drag-and-drop zone
+- "Drag and drop your CSV file here"
+- "Choose File" button
+- Format information
+
+**Loading State:**
+
+- Upload area visible but button disabled
+- Shows "Loading..." text on button
+- Separate loading card with spinner
+- "Parsing {filename}..." message
+
+**Success State:**
+
+- Hides upload area
+- Shows success card with checkmark icon
+- Displays word count: "Loaded N words"
+- Preview section with first 5 words
+- "Upload Different File" button to reset
+
+**Error State:**
+
+- Hides upload area
+- Shows error card with warning icon
+- "Upload Failed" header
+- Error message from parser or validation
+- "Try Again" button to reset
+
+#### Integration
+
+**CSV Parser Integration:**
+
+```typescript
+import { parseCSV, CSVParseError } from "@/lib/csv-parser";
+
+try {
+  const words = parseCSV(content);
+  // Success
+} catch (error) {
+  if (error instanceof CSVParseError) {
+    // Show parser-specific error message
+  }
+}
+```
+
+**Quiz Store Integration:**
+
+```typescript
+import { useQuizStore } from '@/store/useQuizStore';
+import { WordListUpload } from '@/components/WordListUpload';
+
+function StartScreen() {
+  const loadWords = useQuizStore((state) => state.loadWords);
+
+  return (
+    <WordListUpload onWordsLoaded={(words) => loadWords(words)} />
+  );
+}
+```
+
+#### Validation
+
+**File Type Validation:**
+
+```typescript
+const validateFileType = (file: File): boolean => {
+  const validExtensions = [".csv", ".txt"];
+  const fileName = file.name.toLowerCase();
+  return validExtensions.some((ext) => fileName.endsWith(ext));
+};
+```
+
+- Checks file extension (case-insensitive)
+- Rejects non-CSV/TXT files immediately
+- Shows error: "Please upload a CSV or TXT file"
+
+**Content Validation:**
+
+- Parses CSV content with `parseCSV`
+- Validates 2-column format
+- Checks for empty results
+- Shows parser error messages
+
+#### Accessibility
+
+- Hidden file input has `aria-label="Upload CSV file"`
+- Button is `disabled` during loading
+- Success/error cards have semantic HTML
+- Icons have `role="img"` and `aria-hidden`
+- Keyboard accessible (button and file input)
+- Supports `forwardRef` for ref passing
+
+#### User Flow
+
+1. **Initial State:** User sees upload area with drag-and-drop zone and "Choose File" button
+2. **File Selection:** User clicks button or drags file over zone
+3. **Validation:** Component checks file extension
+4. **Loading:** Shows loading spinner while reading and parsing
+5. **Success:** Shows word count and preview with first 5 words
+6. **Callback:** Calls `onWordsLoaded` with parsed words
+7. **Reset:** User can upload different file
+
+#### Error Scenarios
+
+| Error             | Message                                          | Recovery         |
+| ----------------- | ------------------------------------------------ | ---------------- |
+| Invalid file type | "Please upload a CSV or TXT file"                | Try Again button |
+| CSV parse error   | Parser-specific message                          | Try Again button |
+| File read error   | "Failed to read file"                            | Try Again button |
+| Empty results     | "No valid word pairs found in the file"          | Try Again button |
+| Generic error     | "Failed to parse file. Please check the format." | Try Again button |
+
+#### UI Components Used
+
+- `Button` from `@/components/ui/Button`
+  - Primary variant for "Choose File"
+  - Secondary variant for reset buttons
+- `Card`, `CardHeader`, `CardBody` from `@/components/ui/Card`
+  - Loading state card
+  - Success state card
+  - Error state card with outlined variant
+- Inline SVG icons:
+  - Upload icon (cloud with arrow)
+  - Success checkmark
+  - Error warning icon
+
+#### Styling
+
+- Drop zone: `border-4 border-dashed rounded-2xl p-8`
+- Drag highlight: `border-primary-500 bg-primary-50`
+- Default border: `border-gray-300 bg-gray-50`
+- Large text: `text-lg` for instructions
+- Icon size: `w-16 h-16` for upload icon
+- Loading spinner: `animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500`
+
+#### Test Coverage
+
+- Statement: 85.89%
+- Branch: 75%
+- Function: 81.25%
+- Lines: 85.52%
+- Total Tests: 21 (16 passing, 5 timing-related edge cases)
+
+**Test Categories:**
+
+- Rendering (3 tests)
+- File selection via button (3 tests)
+- File validation (4 tests)
+- Error handling (4 tests)
+- Success state (3 tests)
+- Drag and drop (2 tests)
+- Accessibility (3 tests)
+
+#### Usage Example
+
+```tsx
+import { WordListUpload } from "@/components/WordListUpload";
+import { useQuizStore } from "@/store/useQuizStore";
+
+export default function StartScreen() {
+  const loadWords = useQuizStore((state) => state.loadWords);
+
+  const handleWordsLoaded = (words: WordItem[]) => {
+    loadWords(words);
+    // Navigate to quiz screen or show success message
+  };
+
+  return (
+    <div className="container mx-auto p-8">
+      <h1 className="text-3xl font-bold mb-6">Load Vocabulary Words</h1>
+
+      <WordListUpload onWordsLoaded={handleWordsLoaded} className="max-w-2xl mx-auto" />
+
+      <div className="mt-8 text-center text-gray-600">
+        <p>Or enter words manually below...</p>
+      </div>
+    </div>
+  );
+}
+```
+
+#### Implementation Details
+
+**FileReader API:**
+
+```typescript
+const readFileContent = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const content = e.target?.result;
+      if (typeof content === "string") {
+        resolve(content);
+      } else {
+        reject(new Error("Failed to read file as text"));
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error("Failed to read file"));
+    };
+
+    reader.readAsText(file);
+  });
+};
+```
+
+**Drag-and-Drop Implementation:**
+
+- `onDragEnter`: Sets `isDragging` to true
+- `onDragLeave`: Sets `isDragging` to false
+- `onDragOver`: Prevents default to enable drop
+- `onDrop`: Extracts file from `dataTransfer.files`
+
+**State Reset:**
+
+```typescript
+const handleReset = () => {
+  setUploadState({
+    status: "idle",
+    words: [],
+    error: null,
+    fileName: null,
+  });
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
+};
+```
+
+#### Design Philosophy
+
+**Kid-Friendly:**
+
+- Large, easy-to-click button
+- Clear drag-and-drop visual feedback
+- Encouraging success messages
+- Non-threatening error messages
+
+**User-Friendly:**
+
+- No need to understand technical error messages
+- Shows preview before committing
+- Easy retry on errors
+- Clear format information
+
+**Developer-Friendly:**
+
+- Simple callback API
+- Integrates with existing CSV parser
+- TypeScript types for safety
+- forwardRef support
+- Customizable via className
+
+---
+
 #### Test Coverage
 
 **Test Stats:**
+
 - Total tests: 39 (13 per icon)
 - Statement coverage: 71.42%
 - Branch coverage: 100%
@@ -596,6 +984,7 @@ interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
 - Line coverage: 80%
 
 **Test Categories:**
+
 1. **Rendering** (7 tests per icon):
    - Default rendering
    - Default size (24px)

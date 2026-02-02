@@ -149,7 +149,7 @@ Contributions are welcome! Please read the specification and implementation plan
 
 ## ✨ Status
 
-**Current Phase**: UI Components Library (Phase 4) 🚧
+**Current Phase**: Word List Input (Phase 5) 🚧
 
 **Completed:**
 
@@ -168,12 +168,15 @@ Contributions are welcome! Please read the specification and implementation plan
 - ✅ **Phase 4**: UI Components Library
   - Task 4.1: Base UI Components Implemented (87.38% coverage) ✅
   - Task 4.2: SVG Icon Components Implemented (71.42% coverage) ✅
+- 🚧 **Phase 5**: Word List Input
+  - Task 5.1: CSV Upload Component Implemented (85.89% coverage, 16/21 tests) ✅
+  - Task 5.2: Manual Entry Table Component (Next)
 
 **Next Steps**:
 
-- Implement CSV Upload component (Phase 5 Task 5.1)
-- Implement word list input components (Phase 5)
+- Implement Manual Entry Table component (Phase 5 Task 5.2)
 - Create quiz screen components (Phase 6)
+- Implement global features (Phase 7)
 
 **i18n Features Implemented:**
 

@@ -1,5 +1,5 @@
-import React from "react";
-import Image from "next/image";
+import Image from 'next/image';
+import React from 'react';
 
 export interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -22,7 +22,7 @@ export interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
  * - Accessible with ARIA labels
  */
 export const Rocket = React.forwardRef<HTMLDivElement, RocketProps>(
-  ({ size = 24, ariaLabel = "Rocket", className = "", ...props }, ref) => {
+  ({ size = 24, ariaLabel = 'Rocket', className = '', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -41,7 +41,7 @@ export const Rocket = React.forwardRef<HTMLDivElement, RocketProps>(
         />
       </div>
     );
-  }
+  },
 );
 
-Rocket.displayName = "Rocket";
+Rocket.displayName = 'Rocket';

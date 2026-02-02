@@ -1,5 +1,5 @@
-import React from "react";
-import Image from "next/image";
+import Image from 'next/image';
+import React from 'react';
 
 export interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -22,7 +22,7 @@ export interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
  * - Accessible with ARIA labels
  */
 export const Star = React.forwardRef<HTMLDivElement, StarProps>(
-  ({ size = 24, ariaLabel = "Star", className = "", ...props }, ref) => {
+  ({ size = 24, ariaLabel = 'Star', className = '', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -41,7 +41,7 @@ export const Star = React.forwardRef<HTMLDivElement, StarProps>(
         />
       </div>
     );
-  }
+  },
 );
 
-Star.displayName = "Star";
+Star.displayName = 'Star';

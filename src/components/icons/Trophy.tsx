@@ -1,5 +1,5 @@
-import React from "react";
-import Image from "next/image";
+import Image from 'next/image';
+import React from 'react';
 
 export interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -22,7 +22,7 @@ export interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
  * - Accessible with ARIA labels
  */
 export const Trophy = React.forwardRef<HTMLDivElement, TrophyProps>(
-  ({ size = 24, ariaLabel = "Trophy", className = "", ...props }, ref) => {
+  ({ size = 24, ariaLabel = 'Trophy', className = '', ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -41,7 +41,7 @@ export const Trophy = React.forwardRef<HTMLDivElement, TrophyProps>(
         />
       </div>
     );
-  }
+  },
 );
 
-Trophy.displayName = "Trophy";
+Trophy.displayName = 'Trophy';
