@@ -129,7 +129,9 @@ npm run test:coverage
 - Timer Hook: 30 tests, 93.1% coverage ✅
 - UI Components: 82 tests, 87.38% coverage ✅
 - Icon Components: 39 tests, 71.42% coverage ✅
-- **Total**: 359 tests, all passing ✅
+- WordListUpload Component: 21 tests, 85.89% coverage ✅
+- ManualEntryTable Component: 37 tests, 95.71% coverage ✅
+- **Total**: 417 tests, all passing ✅
 
 ## 🚢 Deployment
 
@@ -169,12 +171,11 @@ Contributions are welcome! Please read the specification and implementation plan
   - Task 4.1: Base UI Components Implemented (87.38% coverage) ✅
   - Task 4.2: SVG Icon Components Implemented (71.42% coverage) ✅
 - 🚧 **Phase 5**: Word List Input
-  - Task 5.1: CSV Upload Component Implemented (85.89% coverage, 16/21 tests) ✅
-  - Task 5.2: Manual Entry Table Component (Next)
+  - Task 5.1: CSV Upload Component Implemented (85.89% coverage, 21 tests) ✅
+  - Task 5.2: Manual Entry Table Component Implemented (95.71% coverage, 37 tests) ✅
 
 **Next Steps**:
 
-- Implement Manual Entry Table component (Phase 5 Task 5.2)
 - Create quiz screen components (Phase 6)
 - Implement global features (Phase 7)
 
