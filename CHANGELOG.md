@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Practice mode implementation with PracticeCard component
+  - 3-repetition typing practice for incorrect answers
+  - Visual progress dots (1/3, 2/3, 3/3)
+  - Progressive encouragement messages (Keep going! → Good! → Excellent!)
+  - Success celebration after completing practice
+  - Words move to back of queue after practice
+
 ### Planned
 
 - Manual word entry table component
@@ -15,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Quiz flow screens (start, quiz, results)
 - Word list overlay component
 - localStorage utilities
-- Practice mode implementation
 
 ## [0.1.0] - 2026-02-01
 
