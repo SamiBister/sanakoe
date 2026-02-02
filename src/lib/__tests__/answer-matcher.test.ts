@@ -1,6 +1,6 @@
 /**
  * Unit tests for Answer Matcher
- * 
+ *
  * Tests the answer validation logic with various edge cases including:
  * - Case sensitivity
  * - Whitespace handling
@@ -10,11 +10,7 @@
  * - Similarity scoring
  */
 
-import {
-  matchAnswer,
-  isEmptyAnswer,
-  getSimilarity,
-} from '../answer-matcher';
+import { getSimilarity, isEmptyAnswer, matchAnswer } from '../answer-matcher';
 
 describe('matchAnswer', () => {
   describe('exact matches', () => {
@@ -232,7 +228,7 @@ describe('getSimilarity', () => {
       const similarity1 = getSimilarity('helo', 'hello');
       expect(similarity1).toBeGreaterThan(0.7);
       expect(similarity1).toBeLessThan(1.0);
-      
+
       // "wrld" vs "world" (1 char difference)
       const similarity2 = getSimilarity('wrld', 'world');
       expect(similarity2).toBeGreaterThan(0.7);
@@ -244,7 +240,7 @@ describe('getSimilarity', () => {
       const similarity1 = getSimilarity('hello', 'hallo');
       expect(similarity1).toBeGreaterThan(0.5);
       expect(similarity1).toBeLessThan(0.9);
-      
+
       // "test" vs "toast" (2 substitutions)
       const similarity2 = getSimilarity('test', 'toast');
       expect(similarity2).toBeGreaterThan(0.3);
@@ -254,7 +250,7 @@ describe('getSimilarity', () => {
     it('should return low similarity for very different strings', () => {
       const similarity1 = getSimilarity('hello', 'goodbye');
       expect(similarity1).toBeLessThan(0.5);
-      
+
       const similarity2 = getSimilarity('cat', 'dog');
       expect(similarity2).toBeLessThan(0.5);
     });
@@ -270,7 +266,7 @@ describe('getSimilarity', () => {
       const similarity1 = getSimilarity('hi', 'hello');
       expect(similarity1).toBeGreaterThan(0);
       expect(similarity1).toBeLessThan(1);
-      
+
       const similarity2 = getSimilarity('test', 'testing');
       expect(similarity2).toBeGreaterThan(0.5);
       expect(similarity2).toBeLessThan(1);

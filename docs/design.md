@@ -385,9 +385,7 @@ type Records = {
 ```typescript
 function generateListFingerprint(words: WordItem[]): string {
   // Sort by prompt+answer for stability
-  const sorted = [...words].sort((a, b) =>
-    (a.prompt + a.answer).localeCompare(b.prompt + b.answer),
-  );
+  const sorted = [...words].sort((a, b) => (a.prompt + a.answer).localeCompare(b.prompt + b.answer));
 
   // Simple hash (or JSON + base64)
   const json = JSON.stringify(sorted.map((w) => [w.prompt, w.answer]));
@@ -647,9 +645,7 @@ describe("parseCSV", () => {
 
 ```typescript
 // Reduced motion detection
-const prefersReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
-).matches;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Disable animations if needed
 const transition = prefersReducedMotion ? "" : "transition-all duration-300";
