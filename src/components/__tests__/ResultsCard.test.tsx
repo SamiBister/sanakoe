@@ -4,6 +4,19 @@
 import type { WordItem } from '@/lib/types';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
+
+// Mock useConfetti hook - must be before component import
+const mockFireBurst = jest.fn();
+jest.mock('@/hooks/useConfetti', () => ({
+  useConfetti: () => ({
+    fireConfetti: jest.fn(),
+    fireBurst: mockFireBurst,
+    fireCannon: jest.fn(),
+    isReducedMotion: () => false,
+  }),
+}));
+
+// Import component after the mock
 import { ResultsCard } from '../ResultsCard';
 
 // Mock next-intl
@@ -260,6 +273,68 @@ describe('ResultsCard', () => {
       expect(
         screen.getByText('Perfect! You got all words right on the first try!'),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('Confetti Animation', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+      mockFireBurst.mockClear();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('triggers confetti on new tries record', async () => {
+      render(<ResultsCard {...defaultProps} isNewTriesRecord={true} />);
+
+      // Advance timer past the 300ms delay
+      jest.advanceTimersByTime(500);
+
+      expect(mockFireBurst).toHaveBeenCalledTimes(1);
+    });
+
+    it('triggers confetti on new time record', async () => {
+      render(<ResultsCard {...defaultProps} isNewTimeRecord={true} />);
+
+      // Advance timer past the 300ms delay
+      jest.advanceTimersByTime(500);
+
+      expect(mockFireBurst).toHaveBeenCalledTimes(1);
+    });
+
+    it('triggers confetti on both new records', async () => {
+      render(<ResultsCard {...defaultProps} isNewTriesRecord={true} isNewTimeRecord={true} />);
+
+      // Advance timer past the 300ms delay
+      jest.advanceTimersByTime(500);
+
+      // Should only fire once even with both records
+      expect(mockFireBurst).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not trigger confetti when no new record', async () => {
+      render(<ResultsCard {...defaultProps} isNewTriesRecord={false} isNewTimeRecord={false} />);
+
+      // Advance timer
+      jest.advanceTimersByTime(500);
+
+      expect(mockFireBurst).not.toHaveBeenCalled();
+    });
+
+    it('only triggers confetti once on re-render', async () => {
+      const { rerender } = render(<ResultsCard {...defaultProps} isNewTriesRecord={true} />);
+
+      jest.advanceTimersByTime(500);
+      expect(mockFireBurst).toHaveBeenCalledTimes(1);
+
+      // Re-render the component
+      rerender(<ResultsCard {...defaultProps} isNewTriesRecord={true} />);
+
+      jest.advanceTimersByTime(500);
+      // Should still be only 1 call
+      expect(mockFireBurst).toHaveBeenCalledTimes(1);
     });
   });
 });

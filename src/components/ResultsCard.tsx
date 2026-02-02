@@ -2,8 +2,10 @@
 
 import { Trophy } from '@/components/icons';
 import { Button, Card, CardBody } from '@/components/ui';
+import { useConfetti } from '@/hooks/useConfetti';
 import type { ListRecords, WordItem } from '@/lib/types';
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
 
 export interface ResultsCardProps {
   /**
@@ -98,6 +100,23 @@ export function ResultsCard({
   className = '',
 }: ResultsCardProps) {
   const t = useTranslations('results');
+  const { fireBurst } = useConfetti();
+  const hasTriggeredConfetti = useRef(false);
+
+  const hasNewRecord = isNewTriesRecord || isNewTimeRecord;
+  const hasMistakes = wordsNotFirstTry.length > 0;
+
+  // Trigger confetti celebration when there's a new record
+  useEffect(() => {
+    if (hasNewRecord && !hasTriggeredConfetti.current) {
+      hasTriggeredConfetti.current = true;
+      // Small delay to let the component render first
+      const timer = setTimeout(() => {
+        fireBurst();
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [hasNewRecord, fireBurst]);
 
   // Determine motivation message based on records
   const getMotivationMessage = (): string => {
@@ -113,9 +132,6 @@ export function ResultsCard({
     // Default motivation for no new record
     return t('motivationFewer');
   };
-
-  const hasNewRecord = isNewTriesRecord || isNewTimeRecord;
-  const hasMistakes = wordsNotFirstTry.length > 0;
 
   return (
     <Card className={`max-w-2xl w-full ${className}`}>

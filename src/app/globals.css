@@ -1,6 +1,65 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4 theme customization */
+@theme {
+  /* Kid-friendly primary colors (bright orange/yellow) */
+  --color-primary-50: #fef3e2;
+  --color-primary-100: #fce4b6;
+  --color-primary-200: #fad488;
+  --color-primary-300: #f8c45a;
+  --color-primary-400: #f7b737;
+  --color-primary-500: #f5aa14;
+  --color-primary-600: #f39c12;
+  --color-primary-700: #e08a0e;
+  --color-primary-800: #ce780b;
+  --color-primary-900: #ad5900;
+
+  /* Secondary colors (purple/indigo for variety) */
+  --color-secondary-50: #f5f3ff;
+  --color-secondary-100: #ede9fe;
+  --color-secondary-200: #ddd6fe;
+  --color-secondary-300: #c4b5fd;
+  --color-secondary-400: #a78bfa;
+  --color-secondary-500: #8b5cf6;
+  --color-secondary-600: #7c3aed;
+  --color-secondary-700: #6d28d9;
+  --color-secondary-800: #5b21b6;
+  --color-secondary-900: #4c1d95;
+
+  /* Success colors (bright teal) */
+  --color-success-50: #e8f8f5;
+  --color-success-100: #c3ede3;
+  --color-success-200: #9ae2d0;
+  --color-success-300: #6fd6bd;
+  --color-success-400: #4fcdaf;
+  --color-success-500: #27c4a1;
+  --color-success-600: #21b591;
+  --color-success-700: #19a37e;
+  --color-success-800: #12926b;
+  --color-success-900: #007349;
+
+  /* Danger colors (bright red) */
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+
+  /* Custom border radius */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* Custom shadows */
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -80,4 +139,114 @@ html {
 
 .animate-scale-in {
   animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Page transition animations */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pageExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+.animate-page-enter {
+  animation: pageEnter 0.3s ease-out;
+}
+
+.animate-page-exit {
+  animation: pageExit 0.3s ease-out;
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Confetti celebration animation target */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Enhanced focus-visible styles for accessibility */
+*:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Enhanced focus for buttons */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 4px solid #f59e0b;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3);
+}
+
+/* Enhanced focus for inputs */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #14b8a6;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.2);
+}
+
+/* Respect prefers-reduced-motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fadeIn,
+  .animate-slideUp,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-page-enter,
+  .animate-page-exit,
+  .animate-pulse-slow,
+  .animate-bounce,
+  .animate-spin {
+    animation: none !important;
+  }
 }

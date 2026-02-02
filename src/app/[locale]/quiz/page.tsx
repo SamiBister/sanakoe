@@ -1,10 +1,12 @@
 'use client';
 
+import { PageTransition } from '@/components/PageTransition';
 import { PracticeCard } from '@/components/PracticeCard';
 import { ProgressHeader } from '@/components/ProgressHeader';
 import { QuizCard } from '@/components/QuizCard';
 import { useQuizStore } from '@/hooks/useQuizStore';
 import { matchAnswer } from '@/lib/answer-matcher';
+import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -34,6 +36,7 @@ type FeedbackState = 'none' | 'correct' | 'incorrect';
  */
 export default function QuizPage() {
   const router = useRouter();
+  const locale = useLocale();
 
   // Quiz store state
   const session = useQuizStore((state) => state.session);
@@ -53,32 +56,46 @@ export default function QuizPage() {
   // Track previous word to detect changes
   const prevWordIdRef = useRef<string | null>(null);
 
+  // Track if we've already navigated to results to prevent loops
+  const hasNavigatedToResults = useRef(false);
+
+  // Reset navigation flag when starting a new quiz (no words resolved yet)
+  useEffect(() => {
+    if (session && !session.words.some((w) => w.resolved)) {
+      hasNavigatedToResults.current = false;
+    }
+  }, [session]);
+
   // Redirect to start if no active quiz
   useEffect(() => {
     if (!session) {
-      router.push('/');
+      router.push(`/${locale}`);
     }
-  }, [session, router]);
+  }, [session, router, locale]);
 
   // Check if quiz is complete and navigate to results
+  // Compute completion from session data directly to avoid dependency issues
+  const allWordsResolved = session?.words?.length ? session.words.every((w) => w.resolved) : false;
+
   useEffect(() => {
-    if (session && isQuizComplete()) {
+    if (session && allWordsResolved && !hasNavigatedToResults.current) {
+      hasNavigatedToResults.current = true;
       endQuiz();
-      router.push('/results');
+      router.push(`/${locale}/results`);
     }
-  }, [session, isQuizComplete, endQuiz, router]);
+  }, [session, allWordsResolved, endQuiz, router, locale]);
 
   // Reset feedback when word changes (only in normal mode)
   useEffect(() => {
     if (session?.mode !== 'normal') return;
-    const currentWordId = getCurrentWord()?.id;
+    const currentWordId = session?.currentId;
     if (currentWordId && currentWordId !== prevWordIdRef.current) {
       setFeedback('none');
       setShowCorrectAnswer(undefined);
       setIsProcessing(false);
       prevWordIdRef.current = currentWordId;
     }
-  }, [getCurrentWord]);
+  }, [session?.mode, session?.currentId]);
 
   // Get current word and progress
   const currentWord = getCurrentWord();
@@ -151,7 +168,7 @@ export default function QuizPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center p-4 sm:p-8 bg-gradient-to-br from-primary-50 via-white to-secondary-50">
-      <div className="w-full max-w-4xl">
+      <PageTransition className="w-full max-w-4xl">
         {/* Progress Header */}
         <div className="mb-8">
           <ProgressHeader
@@ -183,7 +200,7 @@ export default function QuizPage() {
             />
           )}
         </div>
-      </div>
+      </PageTransition>
     </main>
   );
 }

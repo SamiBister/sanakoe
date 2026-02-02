@@ -79,6 +79,7 @@ Provide an engaging, stress-free environment where children can practice vocabul
 | **IDs**       | nanoid                | 5.0+    | Unique ID generation for words         |
 | **Testing**   | Jest                  | Latest  | Unit testing framework                 |
 | **Testing**   | React Testing Library | Latest  | Component testing                      |
+| **Testing**   | Playwright            | Latest  | End-to-end browser testing             |
 
 ### Architecture Style
 
@@ -2127,7 +2128,7 @@ jobs:
 
 ### Technical Debt to Address
 
-- Add E2E tests with Playwright
+- ✅ ~~Add E2E tests with Playwright~~ (Implemented)
 - Implement error boundary for React errors
 - Add Sentry for production error tracking
 - Optimize bundle size (code splitting)

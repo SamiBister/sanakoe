@@ -1,13 +1,13 @@
 /**
  * @jest-environment jsdom
  */
-import QuizPage from '@/app/[locale]/quiz/page';
 import { useQuizStore } from '@/hooks/useQuizStore';
 import type { QuizSession, WordState } from '@/types/quiz';
 import '@testing-library/jest-dom';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -16,6 +16,14 @@ jest.mock('next/navigation', () => ({
 
 // Mock useQuizStore
 jest.mock('@/hooks/useQuizStore');
+
+// Mock PageTransition - simple pass-through that preserves className
+jest.mock('@/components/PageTransition', () => ({
+  __esModule: true,
+  PageTransition: ({ children, className }: { children: ReactNode; className?: string }) => (
+    <div className={className}>{children}</div>
+  ),
+}));
 
 // Mock answer matcher
 jest.mock('@/lib/answer-matcher', () => ({
@@ -52,6 +60,9 @@ jest.mock('next-intl', () => ({
     return translations[key] || key;
   },
 }));
+
+// Import QuizPage after all mocks are set up
+import QuizPage from '@/app/[locale]/quiz/page';
 
 describe('QuizPage', () => {
   const mockPush = jest.fn();

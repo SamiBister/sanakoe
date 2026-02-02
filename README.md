@@ -25,13 +25,13 @@ git clone <repository-url>
 cd sanakoe
 ```
 
-2. Install dependencies:
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Create environment file (optional):
+1. Create environment file (optional):
 
 ```bash
 cp .env.local.example .env.local
@@ -71,6 +71,10 @@ npm start
 - `npm test` - Run Jest unit tests
 - `npm run test:watch` - Run tests in watch mode
 - `npm run test:coverage` - Generate test coverage report
+- `npm run test:e2e` - Run Playwright E2E tests
+- `npm run test:e2e:ui` - Run E2E tests with interactive UI
+- `npm run test:e2e:headed` - Run E2E tests in headed browser mode
+- `npm run test:e2e:debug` - Run E2E tests in debug mode
 
 ## 🏗️ Project Structure
 
@@ -106,6 +110,8 @@ sanakoe/
 
 ## 🧪 Testing
 
+### Unit Tests
+
 The project uses Jest for unit testing with full TypeScript support.
 
 ```bash
@@ -133,6 +139,34 @@ npm run test:coverage
 - ManualEntryTable Component: 37 tests, 95.71% coverage ✅
 - Start Screen (Home Page): 17 tests, 90.9% coverage ✅
 - **Total**: 434 tests, all passing ✅
+
+### E2E Tests
+
+End-to-end tests are powered by Playwright, covering critical user journeys across Chromium, Firefox, and WebKit browsers.
+
+```bash
+# Run all E2E tests
+npm run test:e2e
+
+# Run with interactive UI mode
+npm run test:e2e:ui
+
+# Run in headed browser mode (see the browser)
+npm run test:e2e:headed
+
+# Run in debug mode
+npm run test:e2e:debug
+```
+
+**E2E Test Coverage:**
+
+- `csv-upload-flow.spec.ts` - CSV upload → quiz → results journey
+- `manual-entry-flow.spec.ts` - Manual word entry → quiz → results journey
+- `practice-mode-flow.spec.ts` - Wrong answer → practice mode → continue flow
+- `language-switching.spec.ts` - Finnish/English locale switching
+- `word-list-overlay.spec.ts` - Global word list accessible from all screens
+
+**Browser Coverage:** Chromium, Firefox, WebKit (Safari)
 
 ## 🚢 Deployment
 

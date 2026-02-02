@@ -1,11 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-import ResultsPage from '@/app/[locale]/results/page';
 import { useQuizStore } from '@/hooks/useQuizStore';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
+import { ReactNode } from 'react';
 
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
@@ -14,6 +14,23 @@ jest.mock('next/navigation', () => ({
 
 // Mock useQuizStore
 jest.mock('@/hooks/useQuizStore');
+
+// Mock PageTransition - simple pass-through
+jest.mock('@/components/PageTransition', () => ({
+  __esModule: true,
+  PageTransition: ({ children }: { children: ReactNode }) => children,
+}));
+
+// Mock useConfetti
+jest.mock('@/hooks/useConfetti', () => ({
+  __esModule: true,
+  useConfetti: () => ({
+    fireConfetti: jest.fn(),
+    fireBurst: jest.fn(),
+    fireCannon: jest.fn(),
+    isReducedMotion: () => false,
+  }),
+}));
 
 // Mock storage utilities
 jest.mock('@/lib/storage', () => ({
@@ -61,6 +78,9 @@ jest.mock('@/components/icons', () => ({
     </div>
   ),
 }));
+
+// Import ResultsPage after all mocks are set up
+import ResultsPage from '@/app/[locale]/results/page';
 
 describe('ResultsPage', () => {
   const mockPush = jest.fn();

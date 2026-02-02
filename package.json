@@ -11,7 +11,11 @@
     "type-check": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
   },
   "keywords": [
     "education",
@@ -23,6 +27,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "nanoid": "^5.1.6",
     "next": "^16.1.6",
     "next-intl": "^4.8.1",
@@ -31,10 +36,12 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.2.0",
     "@types/react": "^19.2.10",

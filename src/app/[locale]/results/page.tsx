@@ -1,10 +1,12 @@
 'use client';
 
+import { PageTransition } from '@/components/PageTransition';
 import { ResultsCard } from '@/components/ResultsCard';
 import { useQuizStore } from '@/hooks/useQuizStore';
 import { generateListFingerprint } from '@/lib/hash';
 import { loadRecords, saveRecords } from '@/lib/storage';
 import type { ListRecords, WordItem } from '@/lib/types';
+import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -36,6 +38,7 @@ import { useEffect, useMemo, useState } from 'react';
  */
 export default function ResultsPage() {
   const router = useRouter();
+  const locale = useLocale();
 
   // Quiz store state
   const session = useQuizStore((state) => state.session);
@@ -49,9 +52,9 @@ export default function ResultsPage() {
   // Redirect to start if no completed session
   useEffect(() => {
     if (!session || !session.endTimeMs) {
-      router.push('/');
+      router.push(`/${locale}`);
     }
-  }, [session, router]);
+  }, [session, router, locale]);
 
   // Calculate quiz results
   const results = useMemo(() => {
@@ -162,14 +165,14 @@ export default function ResultsPage() {
       // Use the loadWords action to reset and then start
       useQuizStore.getState().loadWords(resetWords);
       startQuiz();
-      router.push('/quiz');
+      router.push(`/${locale}/quiz`);
     }
   };
 
   // Handle new word list
   const handleNewList = () => {
     resetQuiz();
-    router.push('/');
+    router.push(`/${locale}`);
   };
 
   // Show loading state
@@ -185,17 +188,19 @@ export default function ResultsPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-primary-50 via-white to-secondary-50">
-      <ResultsCard
-        totalWords={results.totalWords}
-        totalTries={results.totalTries}
-        totalTimeMs={results.totalTimeMs}
-        wordsNotFirstTry={results.wordsNotFirstTry}
-        previousRecords={previousRecords}
-        isNewTriesRecord={isNewTriesRecord}
-        isNewTimeRecord={isNewTimeRecord}
-        onRestart={handleRestart}
-        onNewList={handleNewList}
-      />
+      <PageTransition>
+        <ResultsCard
+          totalWords={results.totalWords}
+          totalTries={results.totalTries}
+          totalTimeMs={results.totalTimeMs}
+          wordsNotFirstTry={results.wordsNotFirstTry}
+          previousRecords={previousRecords}
+          isNewTriesRecord={isNewTriesRecord}
+          isNewTimeRecord={isNewTimeRecord}
+          onRestart={handleRestart}
+          onNewList={handleNewList}
+        />
+      </PageTransition>
     </main>
   );
 }

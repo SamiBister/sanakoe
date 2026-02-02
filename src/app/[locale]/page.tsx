@@ -2,19 +2,21 @@
 
 import LanguageSelector from '@/components/LanguageSelector';
 import { ManualEntryTable } from '@/components/ManualEntryTable';
+import { PageTransition } from '@/components/PageTransition';
 import { WordListUpload } from '@/components/WordListUpload';
 import { Rocket } from '@/components/icons';
 import { Button } from '@/components/ui';
 import { useQuizStore } from '@/hooks/useQuizStore';
 import type { WordItem } from '@/lib/types';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 type InputMode = 'none' | 'upload' | 'manual';
 
 export default function Home() {
   const t = useTranslations('start');
+  const locale = useLocale();
   const router = useRouter();
   const loadWords = useQuizStore((state) => state.loadWords);
   const startQuiz = useQuizStore((state) => state.startQuiz);
@@ -22,19 +24,21 @@ export default function Home() {
   const [inputMode, setInputMode] = useState<InputMode>('none');
   const [words, setWords] = useState<WordItem[]>([]);
 
-  const handleWordsLoaded = (loadedWords: WordItem[]) => {
+  const handleWordsLoaded = useCallback((loadedWords: WordItem[]) => {
     setWords(loadedWords);
-  };
+  }, []);
 
   const handleStartQuiz = () => {
-    if (words.length === 0) return;
+    if (words.length === 0) {
+      return;
+    }
 
     // Load words into quiz store and start quiz
     loadWords(words);
     startQuiz();
 
-    // Navigate to quiz screen
-    router.push('/quiz');
+    // Navigate to quiz screen (include locale prefix)
+    router.push(`/${locale}/quiz`);
   };
 
   const wordCount = words.length;
@@ -46,8 +50,8 @@ export default function Home() {
         <LanguageSelector />
       </div>
 
-      {/* Main Content */}
-      <div className="w-full max-w-4xl">
+      {/* Main Content with Page Transition */}
+      <PageTransition className="w-full max-w-4xl">
         {/* Hero Section */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
@@ -125,6 +129,7 @@ export default function Home() {
             </div>
 
             <Button
+              type="button"
               variant="primary"
               size="lg"
               onClick={handleStartQuiz}
@@ -135,7 +140,7 @@ export default function Home() {
             </Button>
           </div>
         )}
-      </div>
+      </PageTransition>
     </main>
   );
 }
