@@ -356,7 +356,53 @@ type Records = {
 
 **Test Coverage:** 45 tests, 100% statement coverage
 
-### 5.5 Practice Mode
+### 5.5 Zustand Quiz Store ✅
+
+**Status:** Implemented and tested (94.33% coverage)
+
+**Features:**
+
+- Centralized quiz state management with 11 actions and 4 selectors
+- Complete quiz lifecycle: loadWords → startQuiz → submitAnswer → endQuiz → resetQuiz
+- Fisher-Yates shuffle for word randomization
+- FIFO queue management for unresolved words
+- Normal mode: answer validation, tries tracking, auto-advance on correct
+- Practice mode: 3-repetition requirement, no tries impact
+- Mode transitions: normal ↔ practice
+- Timer tracking (startTimeMs, endTimeMs)
+- Progress calculation (resolved/total)
+- Convenience hooks for actions and selectors
+
+**Store Interface:**
+
+```typescript
+interface QuizStore {
+  session: QuizSession | null;
+
+  // Actions
+  loadWords: (words: WordItem[]) => void;
+  startQuiz: () => void;
+  submitAnswer: (answer: string) => void;
+  submitPracticeAnswer: (answer: string) => void;
+  moveToNextWord: () => void;
+  enterPracticeMode: (wordId: string) => void;
+  exitPracticeMode: () => void;
+  endQuiz: () => void;
+  resetQuiz: () => void;
+
+  // Selectors
+  getCurrentWord: () => WordItem | null;
+  getProgress: () => { resolved: number; total: number };
+  isQuizActive: () => boolean;
+  isQuizComplete: () => boolean;
+}
+```
+
+**Implementation:** [src/hooks/useQuizStore.ts](../src/hooks/useQuizStore.ts)
+
+**Test Coverage:** 58 tests, 94.33% statement coverage
+
+### 5.6 Practice Mode
 
 **Logic:**
 
@@ -369,16 +415,16 @@ type Records = {
    - Validates match
    - Decrements remaining counter
 7. After 3rd repetition: `exitPracticeMode()`
-8. Returns to normal mode
-9. Word remains in unresolvedIds queue (will appear later)
+8. Returns to normal mode (stays on same word)
+9. User answers again in normal mode to resolve the word
 
 **Design Rationale:**
 
 - Spaced repetition for better retention
 - Immediate practice reinforces correct answer
-- Word reappears later to test long-term retention
+- Must answer correctly in normal mode after practice to mark as resolved
 
-### 5.4 Record Tracking
+### 5.7 Record Tracking
 
 **Fingerprinting:**
 
