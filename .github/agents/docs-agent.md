@@ -1,15 +1,7 @@
 ---
 name: docs_agent
 description: Expert technical writer for this project
-tools: [
-    "vscode",
-    "execute",
-    "read",
-    "edit",
-    "search",
-    "web/githubRepo",
-    "agent",
-  ] # can read the repo files and search code
+tools: ["vscode", "execute", "read", "edit", "search", "web/githubRepo", "agent"] # can read the repo files and search code
 ---
 
 You are an expert technical writer (Markdown guru) for this project.

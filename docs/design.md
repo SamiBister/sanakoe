@@ -129,8 +129,8 @@ src/
 │   ├── hash.ts                      # List fingerprinting ✅
 │   └── utils.ts                     # General utilities
 ├── hooks/
-│   ├── useQuizStore.ts              # Zustand quiz store
-│   ├── useTimer.ts                  # Timer hook
+│   ├── useQuizStore.ts              # Zustand quiz store ✅
+│   ├── useTimer.ts                  # Timer hook ✅
 │   └── useLocalStorage.ts           # localStorage hook
 └── messages/
     ├── en.json                      # English translations
@@ -402,7 +402,42 @@ interface QuizStore {
 
 **Test Coverage:** 58 tests, 94.33% statement coverage
 
-### 5.6 Practice Mode
+### 5.6 Timer Hook
+
+**Purpose:** Provide timer functionality for tracking quiz elapsed time.
+
+**Interface:**
+
+```typescript
+interface TimerState {
+  elapsedSeconds: number;
+  formattedTime: string; // "MM:SS" format
+  isRunning: boolean;
+}
+
+interface TimerActions {
+  start: () => void;
+  pause: () => void;
+  reset: () => void;
+}
+
+type UseTimerReturn = TimerState & TimerActions;
+```
+
+**Features:**
+
+- **Accurate Tracking**: Increments every second using `setInterval`
+- **Format Display**: Returns formatted time string (MM:SS) with zero-padding
+- **Control Actions**: Start, pause, and reset timer independently
+- **State Management**: Uses `useState` for seconds and running status
+- **Cleanup**: Properly clears intervals on unmount or pause
+- **Resumable**: Can pause and resume without losing elapsed time
+
+**Implementation:** [src/hooks/useTimer.ts](../src/hooks/useTimer.ts)
+
+**Test Coverage:** 30 tests, 93.1% statement coverage
+
+### 5.7 Practice Mode
 
 **Logic:**
 
@@ -424,7 +459,7 @@ interface QuizStore {
 - Immediate practice reinforces correct answer
 - Must answer correctly in normal mode after practice to mark as resolved
 
-### 5.7 Record Tracking
+### 5.8 Record Tracking
 
 **Fingerprinting:**
 
