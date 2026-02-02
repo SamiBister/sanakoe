@@ -122,11 +122,11 @@ src/
 │   ├── ResultsCard.tsx              # Results summary
 │   └── LanguageSelector.tsx         # Language switcher
 ├── lib/
-│   ├── types.ts                     # TypeScript type definitions
+│   ├── types.ts                     # TypeScript type definitions ✅
 │   ├── csv-parser.ts                # CSV parsing logic ✅
-│   ├── answer-matcher.ts            # Answer validation
-│   ├── storage.ts                   # localStorage utilities
-│   ├── hash.ts                      # List fingerprinting
+│   ├── answer-matcher.ts            # Answer validation ✅
+│   ├── storage.ts                   # localStorage utilities ✅
+│   ├── hash.ts                      # List fingerprinting ✅
 │   └── utils.ts                     # General utilities
 ├── hooks/
 │   ├── useQuizStore.ts              # Zustand quiz store
@@ -304,34 +304,59 @@ type Records = {
 
 **Test Coverage:** 27 tests, 98.71% statement coverage
 
-### 5.2 Answer Matching
+### 5.2 Answer Matching ✅
 
-**Status:** Planned
+**Status:** Implemented and tested (100% coverage)
 
-**Algorithm:**
+**Features:**
 
-```typescript
-function matchAnswer(userInput: string, correctAnswer: string): boolean {
-  // 1. Trim whitespace
-  const trimmedInput = userInput.trim();
-  const trimmedAnswer = correctAnswer.trim();
+- Case-insensitive matching
+- Whitespace normalization (trim + collapse)
+- Special character support
+- Unicode and emoji support
+- Levenshtein distance similarity calculation (for future features)
 
-  // 2. Convert to lowercase
-  const normalizedInput = trimmedInput.toLowerCase();
-  const normalizedAnswer = trimmedAnswer.toLowerCase();
+**Implementation:** [src/lib/answer-matcher.ts](../src/lib/answer-matcher.ts)
 
-  // 3. Collapse multiple spaces (optional)
-  const collapsedInput = normalizedInput.replace(/\s+/g, " ");
-  const collapsedAnswer = normalizedAnswer.replace(/\s+/g, " ");
+**Test Coverage:** 37 tests, 100% statement coverage
 
-  // 4. Exact match
-  return collapsedInput === collapsedAnswer;
-}
-```
+### 5.3 localStorage Utilities ✅
 
-**Future Enhancement:** Levenshtein distance for typo tolerance
+**Status:** Implemented and tested (90.99% coverage)
 
-### 5.3 Practice Mode
+**Features:**
+
+- Records persistence (personal bests per word list)
+- Word list persistence (last used list)
+- Storage versioning and migration system
+- Quota exceeded detection and handling
+- JSON parse error recovery
+- Storage availability checks
+- Usage tracking and quota warnings
+
+**Implementation:** [src/lib/storage.ts](../src/lib/storage.ts)
+
+**Test Coverage:** 41 tests, 90.99% statement coverage
+
+### 5.4 List Fingerprinting ✅
+
+**Status:** Implemented and tested (100% coverage)
+
+**Features:**
+
+- Stable, deterministic hashing
+- Order-independent (sorted before hashing)
+- djb2 hash algorithm with base62 encoding
+- Whitespace and case normalization
+- Content-based list comparison
+- Human-readable descriptions
+- Collision probability estimation
+
+**Implementation:** [src/lib/hash.ts](../src/lib/hash.ts)
+
+**Test Coverage:** 45 tests, 100% statement coverage
+
+### 5.5 Practice Mode
 
 **Logic:**
 
