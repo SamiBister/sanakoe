@@ -15,6 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Progressive encouragement messages (Keep going! → Good! → Excellent!)
   - Success celebration after completing practice
   - Words move to back of queue after practice
+- **Global Word List Overlay** (Task 7.1)
+  - Floating "Word List" button accessible from all quiz screens
+  - Modal overlay displays complete word list with prompt → answer pairs
+  - Filter buttons: All, Remaining, Done
+  - Correct/incorrect status badges
+  - Word count display
+
+### Changed
+
+- **Responsive Layout & Mobile Support** (Task 7.2)
+  - Button component: Added min-height touch targets (44px small, 48px medium, 56px large)
+  - Modal component: Responsive padding (p-2 mobile, p-4 desktop), responsive border-radius and max-height
+  - WordListOverlay: Responsive button positioning and filter touch targets
+  - ManualEntryTable: Enhanced mobile table with min-width, responsive padding, and 44px input touch targets
 
 ### Planned
 
@@ -22,7 +36,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Answer matcher implementation
 - Quiz state management with Zustand
 - Quiz flow screens (start, quiz, results)
-- Word list overlay component
 - localStorage utilities
 
 ## [0.1.0] - 2026-02-01

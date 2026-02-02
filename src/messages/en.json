@@ -113,6 +113,19 @@
     "en": "English",
     "fi": "Suomi"
   },
+  "errors": {
+    "title": "Oops! Something went wrong",
+    "description": "Don't worry, it's not your fault! Let's try again.",
+    "tryAgain": "Try Again",
+    "goHome": "Go to Home",
+    "storageQuota": "Storage is full. Please clear some browser data or use a smaller word list.",
+    "storageCorrupted": "Saved data appears to be corrupted. It has been reset.",
+    "storageUnavailable": "Unable to save data. Your browser may be in private mode.",
+    "csvEmpty": "The file appears to be empty. Please upload a file with word pairs.",
+    "csvSingleColumn": "The file needs two columns (word and translation).",
+    "csvNoValidPairs": "No valid word pairs found. Make sure each row has both a word and translation.",
+    "unknown": "An unexpected error occurred. Please try again."
+  },
   "common": {
     "yes": "Yes",
     "no": "No",

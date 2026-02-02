@@ -319,18 +319,22 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+          <table className="w-full border-collapse min-w-[400px]">
             <thead>
               <tr className="bg-gray-50 border-b-2 border-gray-200">
-                <th className="p-3 text-left font-semibold text-gray-700">Prompt</th>
-                <th className="p-3 text-left font-semibold text-gray-700">Answer</th>
+                <th className="p-2 sm:p-3 text-left font-semibold text-gray-700 text-sm sm:text-base">
+                  Prompt
+                </th>
+                <th className="p-2 sm:p-3 text-left font-semibold text-gray-700 text-sm sm:text-base">
+                  Answer
+                </th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row, index) => (
                 <tr key={row.id} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="p-2">
+                  <td className="p-1.5 sm:p-2">
                     <input
                       ref={(el) => {
                         if (el) {
@@ -344,12 +348,12 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
                       onChange={(e) => updateCell(row.id, 'prompt', e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, index, 'prompt')}
                       onPaste={(e) => handlePaste(e, index, 'prompt')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder={index === 0 ? 'Enter word or phrase...' : ''}
+                      className="w-full px-2 sm:px-3 py-2 min-h-[44px] text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder={index === 0 ? 'Enter word...' : ''}
                       aria-label={`Prompt for row ${index + 1}`}
                     />
                   </td>
-                  <td className="p-2">
+                  <td className="p-1.5 sm:p-2">
                     <input
                       ref={(el) => {
                         if (el) {
@@ -363,7 +367,7 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
                       onChange={(e) => updateCell(row.id, 'answer', e.target.value)}
                       onKeyDown={(e) => handleKeyDown(e, index, 'answer')}
                       onPaste={(e) => handlePaste(e, index, 'answer')}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      className="w-full px-2 sm:px-3 py-2 min-h-[44px] text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder={index === 0 ? 'Enter translation...' : ''}
                       aria-label={`Answer for row ${index + 1}`}
                     />

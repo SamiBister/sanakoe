@@ -1,27 +1,27 @@
-import { locales } from "@/i18n";
-import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
-import "../globals.css";
+import { ClientProviders } from '@/components/ClientProviders';
+import { locales } from '@/i18n';
+import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import '../globals.css';
 
 export const metadata: Metadata = {
-  title: "Sanakoe - Language Quiz for Kids",
-  description:
-    "Practice vocabulary for school language tests with a fun, gamified experience",
+  title: 'Sanakoe - Language Quiz for Kids',
+  description: 'Practice vocabulary for school language tests with a fun, gamified experience',
 };
 
 type Props = {
   children: React.ReactNode;
-  params: Promise<{locale: string}>;
+  params: Promise<{ locale: string }>;
 };
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({locale}));
+  return locales.map((locale) => ({ locale }));
 }
 
-export default async function LocaleLayout({children, params}: Props) {
-  const {locale} = await params;
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as any)) {
@@ -35,7 +35,7 @@ export default async function LocaleLayout({children, params}: Props) {
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <ClientProviders>{children}</ClientProviders>
         </NextIntlClientProvider>
       </body>
     </html>

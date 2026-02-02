@@ -61,11 +61,12 @@ export const Modal: React.FC<ModalProps> = ({
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
   // Size styles (kid-friendly - generous sizing)
+  // On mobile (< 640px), modals take nearly full width
   const sizeStyles = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
+    sm: 'max-w-md w-full',
+    md: 'max-w-lg w-full',
+    lg: 'max-w-2xl w-full',
+    xl: 'max-w-4xl w-full',
   };
 
   // Handle ESC key
@@ -147,7 +148,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 animate-fadeIn"
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
@@ -159,14 +160,14 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Modal content */}
       <div
         ref={modalRef}
-        className={`relative bg-white rounded-3xl shadow-2xl w-full ${sizeStyles[size]} max-h-[90vh] flex flex-col animate-slideUp`}
+        className={`relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl ${sizeStyles[size]} max-h-[85vh] sm:max-h-[90vh] flex flex-col animate-slideUp`}
         tabIndex={-1}
       >
         {/* Header */}
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
             {title && (
-              <h2 id="modal-title" className="text-2xl font-bold text-gray-800">
+              <h2 id="modal-title" className="text-xl sm:text-2xl font-bold text-gray-800">
                 {title}
               </h2>
             )}
@@ -196,13 +197,15 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
-          <div className="text-gray-700 text-base">{children}</div>
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-3 sm:py-4">
+          <div className="text-gray-700 text-sm sm:text-base">{children}</div>
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">{footer}</div>
+          <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200 flex justify-end gap-2 sm:gap-3">
+            {footer}
+          </div>
         )}
       </div>
     </div>

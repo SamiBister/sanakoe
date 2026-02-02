@@ -443,7 +443,9 @@ type UseTimerReturn = TimerState & TimerActions;
 
 **Test Coverage:** 30 tests, 93.1% statement coverage
 
-### 5.7 UI Component Library
+### 5.7 UI Component Library ✅
+
+**Status:** Implemented with responsive support
 
 **Purpose:** Reusable, kid-friendly UI components for consistent design throughout the application.
 
@@ -451,10 +453,11 @@ type UseTimerReturn = TimerState & TimerActions;
 
 1. **Button** (`src/components/ui/Button.tsx`)
    - Variants: primary, secondary, danger
-   - Sizes: sm, md, lg
+   - Sizes: sm, md, lg (with responsive min-heights: 44px, 48px, 56px)
    - Props: fullWidth, loading
    - Features: Large text, rounded corners, focus states, keyboard accessible
    - Styling: Bright colors, shadow effects, smooth transitions
+   - Touch targets: Minimum 44px height for mobile accessibility
 
 2. **Card** (`src/components/ui/Card.tsx`)
    - Variants: default (shadow), outlined (border), elevated (large shadow)
@@ -471,14 +474,15 @@ type UseTimerReturn = TimerState & TimerActions;
 
 4. **Modal** (`src/components/ui/Modal.tsx`)
    - Props: isOpen, onClose, title, size, footer, closeOnOverlayClick, closeOnEsc
-   - Sizes: sm, md, lg, xl
+   - Sizes: sm, md, lg, xl (all with `w-full` for mobile)
+   - Responsive: `p-2 sm:p-4` container, `rounded-2xl sm:rounded-3xl`, `max-h-[85vh] sm:max-h-[90vh]`
    - Features: Focus trap, body scroll prevention, ESC key support, overlay click
    - Accessibility: ARIA attributes, keyboard navigation, focus restoration
    - Animations: Fade-in overlay, slide-up content
 
 **Design Philosophy:**
 
-- Kid-friendly: Large touch targets, bright colors, clear visual feedback
+- Kid-friendly: Large touch targets (min 44px), bright colors, clear visual feedback
 - Accessible: Full keyboard navigation, ARIA labels, focus management
 - Consistent: Shared design tokens from Tailwind config
 - Flexible: Props for customization while maintaining design consistency
@@ -1682,18 +1686,78 @@ localStorage.setItem(
 );
 ```
 
-### 5.10. Global Word List Overlay
+### 5.10. Global Word List Overlay ✅
+
+**Status:** Implemented
 
 **Features:**
 
-- Accessible from any screen (persistent button)
+- Accessible from any screen (persistent floating button, top-right)
 - Shows all words with status:
   - ✅ Resolved (answered correctly)
   - 🔁 Unresolved (not yet attempted or still pending)
   - ⚠️ First-try mistake (wrong on first attempt)
+- Filter buttons: All, Remaining, Done
+- Word count display per filter
 - Highlights current word during quiz
 - Keyboard accessible (ESC to close)
 - Does not pause timer or affect quiz state
+
+**Responsive Design:**
+
+- Button position: `top-2 right-2` on mobile, `top-4 right-4` on desktop
+- Touch-friendly filter buttons with `min-h-[44px]`
+
+**Implementation:** [src/components/WordListOverlay.tsx](../src/components/WordListOverlay.tsx)
+
+---
+
+### 5.11. Responsive Layout & Mobile Support ✅
+
+**Status:** Implemented
+
+**Design Philosophy:**
+
+- Mobile-first with tablet (768px+) as primary target
+- Touch targets meet accessibility guidelines (minimum 44px)
+- Responsive typography scales with viewport
+
+**Breakpoints (Tailwind):**
+
+- `sm`: 640px
+- `md`: 768px (primary tablet breakpoint)
+- `lg`: 1024px
+
+**Component Responsive Features:**
+
+| Component                  | Mobile                               | Desktop                        |
+| -------------------------- | ------------------------------------ | ------------------------------ |
+| **Button**                 | min-h-[44px] (sm), min-h-[48px] (md) | min-h-[56px] (lg)              |
+| **Modal**                  | p-2, rounded-2xl, max-h-[85vh]       | p-4, rounded-3xl, max-h-[90vh] |
+| **Modal text**             | text-sm                              | text-base                      |
+| **WordListOverlay button** | top-2 right-2                        | top-4 right-4                  |
+| **ManualEntryTable**       | -mx-4 px-4 (full-bleed scroll)       | normal padding                 |
+| **Table inputs**           | min-h-[44px], text-sm                | text-base                      |
+
+**Global Responsive Styles (globals.css):**
+
+```css
+html {
+  font-size: 16px; /* Mobile base */
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 18px; /* Tablet/desktop base */
+  }
+}
+```
+
+**Touch Target Guidelines:**
+
+- Minimum 44×44px for all interactive elements (iOS/Android accessibility)
+- Adequate spacing between touch targets to prevent mis-taps
+- Visual feedback on touch (hover states, focus rings)
 
 ---
 

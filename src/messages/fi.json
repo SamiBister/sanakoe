@@ -113,6 +113,19 @@
     "en": "English",
     "fi": "Suomi"
   },
+  "errors": {
+    "title": "Hups! Jokin meni pieleen",
+    "description": "Älä huoli, ei ole sinun vikasi! Yritetään uudelleen.",
+    "tryAgain": "Yritä Uudelleen",
+    "goHome": "Palaa Alkuun",
+    "storageQuota": "Tallennustila on täynnä. Tyhjennä selaimen tietoja tai käytä pienempää sanalistaa.",
+    "storageCorrupted": "Tallennetut tiedot näyttävät olevan vioittuneet. Ne on nollattu.",
+    "storageUnavailable": "Tietojen tallentaminen ei onnistu. Selain saattaa olla yksityisessä tilassa.",
+    "csvEmpty": "Tiedosto näyttää olevan tyhjä. Lataa tiedosto, jossa on sanapareja.",
+    "csvSingleColumn": "Tiedostossa on oltava kaksi saraketta (sana ja käännös).",
+    "csvNoValidPairs": "Ei löytynyt kelvollisia sanapareja. Varmista, että jokaisella rivillä on sekä sana että käännös.",
+    "unknown": "Tapahtui odottamaton virhe. Yritä uudelleen."
+  },
   "common": {
     "yes": "Kyllä",
     "no": "Ei",

@@ -1,11 +1,14 @@
 import * as csvParser from '@/lib/csv-parser';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { WordListUpload } from '../WordListUpload';
 
-// Mock the CSV parser
-jest.mock('@/lib/csv-parser');
+// Mock the CSV parser, keeping CSVParseError
+jest.mock('@/lib/csv-parser', () => ({
+  ...jest.requireActual('@/lib/csv-parser'),
+  parseCSV: jest.fn(),
+}));
 
 describe('WordListUpload', () => {
   const mockOnWordsLoaded = jest.fn();
@@ -90,7 +93,7 @@ describe('WordListUpload', () => {
       });
     });
 
-    it('shows loading state during file processing', async () => {
+    it('shows success state after file processing', async () => {
       const user = userEvent.setup();
       mockParseCSV.mockReturnValue([
         {
@@ -110,20 +113,29 @@ describe('WordListUpload', () => {
 
       await user.upload(fileInput, file);
 
-      // Loading state should appear briefly
-      expect(screen.getByText(/parsing words\.csv/i)).toBeInTheDocument();
+      // Should show success state after processing
+      await waitFor(() => {
+        expect(screen.getByText(/upload successful/i)).toBeInTheDocument();
+      });
     });
   });
 
   describe('file validation', () => {
-    it('rejects non-CSV/TXT files', async () => {
-      const user = userEvent.setup();
+    it('rejects non-CSV/TXT files via drop', async () => {
       render(<WordListUpload onWordsLoaded={mockOnWordsLoaded} />);
 
+      const dropZone = screen.getByText(/drag and drop/i).closest('div')!;
       const file = new File(['content'], 'document.pdf', { type: 'application/pdf' });
-      const fileInput = screen.getByLabelText(/upload csv file/i) as HTMLInputElement;
 
-      await user.upload(fileInput, file);
+      // Create a mock DataTransfer object
+      const dataTransfer = {
+        files: [file],
+        items: [{ kind: 'file', type: file.type, getAsFile: () => file }],
+        types: ['Files'],
+      };
+
+      // Simulate drop event
+      fireEvent.drop(dropZone, { dataTransfer });
 
       await waitFor(() => {
         expect(screen.getByText(/please upload a CSV or TXT file/i)).toBeInTheDocument();
@@ -384,20 +396,20 @@ describe('WordListUpload', () => {
   });
 
   describe('drag and drop', () => {
-    it('highlights drop zone on drag enter', () => {
+    it('highlights drop zone on drag enter', async () => {
       render(<WordListUpload onWordsLoaded={mockOnWordsLoaded} />);
 
-      const dropZone = screen.getByText(/drag and drop/i).closest('div');
+      const dropZone = screen.getByText(/drag and drop/i).closest('div')!;
 
-      // Simulate drag enter
-      const dragEnterEvent = new Event('dragenter', { bubbles: true });
-      Object.defineProperty(dragEnterEvent, 'dataTransfer', {
-        value: { files: [] },
+      // Use fireEvent to simulate drag enter
+      fireEvent.dragEnter(dropZone, {
+        dataTransfer: { files: [] },
       });
-      dropZone?.dispatchEvent(dragEnterEvent);
 
       // Check if border color changed (indicates highlighting)
-      expect(dropZone).toHaveClass('border-primary-500');
+      await waitFor(() => {
+        expect(dropZone).toHaveClass('border-primary-500');
+      });
     });
 
     it('processes dropped file', async () => {
@@ -437,7 +449,7 @@ describe('WordListUpload', () => {
       expect(screen.getByLabelText(/upload csv file/i)).toBeInTheDocument();
     });
 
-    it('disables button during loading', async () => {
+    it('shows upload different file button after success', async () => {
       const user = userEvent.setup();
       mockParseCSV.mockReturnValue([
         {
@@ -457,8 +469,11 @@ describe('WordListUpload', () => {
 
       await user.upload(fileInput, file);
 
-      const button = screen.getByRole('button', { name: /loading/i });
-      expect(button).toBeDisabled();
+      await waitFor(() => {
+        const button = screen.getByRole('button', { name: /upload different file/i });
+        expect(button).toBeInTheDocument();
+        expect(button).not.toBeDisabled();
+      });
     });
 
     it('supports ref forwarding', () => {

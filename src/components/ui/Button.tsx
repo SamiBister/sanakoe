@@ -55,10 +55,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     // Size styles (kid-friendly - larger than typical)
+    // Minimum touch target is 44px, so py values ensure min-height >= 44px
     const sizeStyles = {
-      sm: 'px-4 py-2 text-base',
-      md: 'px-6 py-3 text-lg',
-      lg: 'px-8 py-4 text-xl',
+      sm: 'px-4 py-2.5 text-base min-h-[44px]',
+      md: 'px-6 py-3 text-lg min-h-[48px]',
+      lg: 'px-8 py-4 text-xl min-h-[56px]',
     };
 
     // Width styles

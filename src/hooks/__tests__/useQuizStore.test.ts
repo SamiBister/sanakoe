@@ -855,6 +855,122 @@ describe('useQuizStore', () => {
     });
   });
 
+  describe('single-word quiz edge cases', () => {
+    it('handles single-word quiz with correct answer', () => {
+      const { result } = renderHook(() => useQuizStore());
+      const words = [createTestWord('1', 'cat', 'kissa')];
+
+      act(() => {
+        result.current.loadWords(words);
+        result.current.startQuiz();
+      });
+
+      expect(result.current.session?.currentId).toBe('1');
+      expect(result.current.getProgress()).toEqual({ resolved: 0, total: 1 });
+
+      // Answer correctly
+      act(() => {
+        result.current.submitAnswer('kissa');
+      });
+
+      expect(result.current.getProgress()).toEqual({ resolved: 1, total: 1 });
+      expect(result.current.isQuizComplete()).toBe(true);
+      expect(result.current.session?.currentId).toBeNull();
+    });
+
+    it('handles single-word quiz with wrong answer and practice mode', () => {
+      const { result } = renderHook(() => useQuizStore());
+      const words = [createTestWord('1', 'cat', 'kissa')];
+
+      act(() => {
+        result.current.loadWords(words);
+        result.current.startQuiz();
+      });
+
+      // Answer incorrectly
+      act(() => {
+        result.current.submitAnswer('wrong');
+      });
+
+      expect(result.current.session?.mode).toBe('practice');
+      expect(result.current.session?.practiceTarget?.id).toBe('1');
+      expect(result.current.session?.practiceTarget?.remaining).toBe(3);
+
+      // Complete practice repetitions
+      act(() => {
+        result.current.submitPracticeAnswer('kissa');
+      });
+      expect(result.current.session?.practiceTarget?.remaining).toBe(2);
+
+      act(() => {
+        result.current.submitPracticeAnswer('kissa');
+      });
+      expect(result.current.session?.practiceTarget?.remaining).toBe(1);
+
+      act(() => {
+        result.current.submitPracticeAnswer('kissa');
+      });
+
+      // Should exit practice mode and continue with the same word
+      expect(result.current.session?.mode).toBe('normal');
+      expect(result.current.session?.currentId).toBe('1');
+
+      // Now answer correctly
+      act(() => {
+        result.current.submitAnswer('kissa');
+      });
+
+      expect(result.current.isQuizComplete()).toBe(true);
+      expect(result.current.getProgress()).toEqual({ resolved: 1, total: 1 });
+    });
+
+    it('handles single-word quiz with multiple wrong attempts', () => {
+      const { result } = renderHook(() => useQuizStore());
+      const words = [createTestWord('1', 'cat', 'kissa')];
+
+      act(() => {
+        result.current.loadWords(words);
+        result.current.startQuiz();
+      });
+
+      // First wrong answer
+      act(() => {
+        result.current.submitAnswer('wrong1');
+      });
+      expect(result.current.session?.mode).toBe('practice');
+
+      // Complete practice
+      act(() => {
+        result.current.submitPracticeAnswer('kissa');
+        result.current.submitPracticeAnswer('kissa');
+        result.current.submitPracticeAnswer('kissa');
+      });
+
+      // Second wrong answer
+      act(() => {
+        result.current.submitAnswer('wrong2');
+      });
+      expect(result.current.session?.mode).toBe('practice');
+      expect(result.current.session?.tries).toBe(2); // Two attempts recorded
+
+      // Complete practice again
+      act(() => {
+        result.current.submitPracticeAnswer('kissa');
+        result.current.submitPracticeAnswer('kissa');
+        result.current.submitPracticeAnswer('kissa');
+      });
+
+      // Finally answer correctly
+      act(() => {
+        result.current.submitAnswer('kissa');
+      });
+
+      expect(result.current.isQuizComplete()).toBe(true);
+      expect(result.current.session?.tries).toBe(3); // Three total attempts
+      expect(result.current.session?.words[0].firstTryFailed).toBe(true);
+    });
+  });
+
   describe('full quiz workflow', () => {
     it('completes full quiz workflow successfully', () => {
       const { result } = renderHook(() => useQuizStore());
