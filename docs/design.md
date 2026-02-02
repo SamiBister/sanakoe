@@ -107,11 +107,12 @@ src/
 │   │       └── page.tsx             # Results screen
 │   └── globals.css                  # Global styles
 ├── components/
-│   ├── ui/                          # Reusable UI primitives
-│   │   ├── Button.tsx
-│   │   ├── Card.tsx
-│   │   ├── Input.tsx
-│   │   └── Modal.tsx
+│   ├── ui/                          # Reusable UI primitives ✅
+│   │   ├── Button.tsx               # ✅
+│   │   ├── Card.tsx                 # ✅
+│   │   ├── Input.tsx                # ✅
+│   │   ├── Modal.tsx                # ✅
+│   │   └── index.ts                 # Export all ✅
 │   ├── WordListUpload.tsx           # CSV file upload
 │   ├── ManualEntryTable.tsx         # Manual word entry
 │   ├── QuizCard.tsx                 # Question display (normal)
@@ -120,7 +121,7 @@ src/
 │   ├── Timer.tsx                    # Quiz timer
 │   ├── WordListOverlay.tsx          # Global word list modal
 │   ├── ResultsCard.tsx              # Results summary
-│   └── LanguageSelector.tsx         # Language switcher
+│   └── LanguageSelector.tsx         # Language switcher ✅
 ├── lib/
 │   ├── types.ts                     # TypeScript type definitions ✅
 │   ├── csv-parser.ts                # CSV parsing logic ✅
@@ -437,7 +438,51 @@ type UseTimerReturn = TimerState & TimerActions;
 
 **Test Coverage:** 30 tests, 93.1% statement coverage
 
-### 5.7 Practice Mode
+### 5.7 UI Component Library
+
+**Purpose:** Reusable, kid-friendly UI components for consistent design throughout the application.
+
+**Components:**
+
+1. **Button** (`src/components/ui/Button.tsx`)
+   - Variants: primary, secondary, danger
+   - Sizes: sm, md, lg
+   - Props: fullWidth, loading
+   - Features: Large text, rounded corners, focus states, keyboard accessible
+   - Styling: Bright colors, shadow effects, smooth transitions
+
+2. **Card** (`src/components/ui/Card.tsx`)
+   - Variants: default (shadow), outlined (border), elevated (large shadow)
+   - Padding: none, sm, md, lg
+   - Props: hoverable (adds hover effects)
+   - Sub-components: CardHeader, CardBody, CardFooter
+   - Features: Rounded corners, generous padding, flexible composition
+
+3. **Input & Textarea** (`src/components/ui/Input.tsx`)
+   - Props: label, error, helperText, isError, inputSize, fullWidth
+   - Features: Large text (lg default), clear focus styles, error indicators
+   - Accessibility: Proper label association, error messages with role="alert"
+   - Styling: Rounded borders, bright focus rings, visual error states
+
+4. **Modal** (`src/components/ui/Modal.tsx`)
+   - Props: isOpen, onClose, title, size, footer, closeOnOverlayClick, closeOnEsc
+   - Sizes: sm, md, lg, xl
+   - Features: Focus trap, body scroll prevention, ESC key support, overlay click
+   - Accessibility: ARIA attributes, keyboard navigation, focus restoration
+   - Animations: Fade-in overlay, slide-up content
+
+**Design Philosophy:**
+
+- Kid-friendly: Large touch targets, bright colors, clear visual feedback
+- Accessible: Full keyboard navigation, ARIA labels, focus management
+- Consistent: Shared design tokens from Tailwind config
+- Flexible: Props for customization while maintaining design consistency
+
+**Implementation:** [src/components/ui/](../src/components/ui/)
+
+**Test Coverage:** 82 tests, 87.38% statement coverage, 98.93% branch coverage
+
+### 5.8 Practice Mode
 
 **Logic:**
 
@@ -459,7 +504,7 @@ type UseTimerReturn = TimerState & TimerActions;
 - Immediate practice reinforces correct answer
 - Must answer correctly in normal mode after practice to mark as resolved
 
-### 5.8 Record Tracking
+### 5.9 Record Tracking
 
 **Fingerprinting:**
 
