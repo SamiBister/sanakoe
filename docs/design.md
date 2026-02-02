@@ -113,6 +113,11 @@ src/
 │   │   ├── Input.tsx                # ✅
 │   │   ├── Modal.tsx                # ✅
 │   │   └── index.ts                 # Export all ✅
+│   ├── icons/                       # SVG icon components ✅
+│   │   ├── Star.tsx                 # ✅
+│   │   ├── Trophy.tsx               # ✅
+│   │   ├── Rocket.tsx               # ✅
+│   │   └── index.ts                 # Export all ✅
 │   ├── WordListUpload.tsx           # CSV file upload
 │   ├── ManualEntryTable.tsx         # Manual word entry
 │   ├── QuizCard.tsx                 # Question display (normal)
@@ -482,7 +487,155 @@ type UseTimerReturn = TimerState & TimerActions;
 
 **Test Coverage:** 82 tests, 87.38% statement coverage, 98.93% branch coverage
 
-### 5.8 Practice Mode
+All components use the forwardRef pattern for ref passing, allowing parent components to access the underlying DOM elements.
+
+### 5.8. Icon Components
+
+Three kid-friendly SVG icon components for visual feedback and motivation:
+
+#### Star Icon
+
+**Purpose:** Correct answers, achievements, and positive feedback.
+
+**Component Interface:**
+```typescript
+interface StarProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: number; // Size in pixels (default: 24)
+  ariaLabel?: string; // Screen reader label (default: "Star")
+}
+```
+
+**Features:**
+- Bright gold color (#FFD700) with orange stroke
+- Scalable to any size via `size` prop
+- Uses Next.js Image component for optimization
+- Accessible with role="img" and aria-label
+- Supports all HTML div attributes
+- forwardRef support for ref passing
+
+**SVG Details:**
+- File: `/public/icons/star.svg`
+- ViewBox: 24x24
+- Fill: Gold (#FFD700)
+- Stroke: Orange (#FFA500)
+
+#### Trophy Icon
+
+**Purpose:** Personal records, achievements, and milestones.
+
+**Component Interface:**
+```typescript
+interface TrophyProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: number; // Size in pixels (default: 24)
+  ariaLabel?: string; // Screen reader label (default: "Trophy")
+}
+```
+
+**Features:**
+- Primary color matches theme orange (#F5AA14)
+- Classic trophy shape with handles and base
+- Scalable and accessible
+- Optimized with Next.js Image
+- forwardRef support
+
+**SVG Details:**
+- File: `/public/icons/trophy.svg`
+- ViewBox: 24x24
+- Fill and Stroke: Primary orange (#F5AA14)
+
+#### Rocket Icon
+
+**Purpose:** Motivation, encouragement, and "launch" actions.
+
+**Component Interface:**
+```typescript
+interface RocketProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: number; // Size in pixels (default: 24)
+  ariaLabel?: string; // Screen reader label (default: "Rocket")
+}
+```
+
+**Features:**
+- Multi-color design: red body, teal flames
+- Playful and energetic appearance
+- Scalable and accessible
+- Optimized with Next.js Image
+- forwardRef support
+
+**SVG Details:**
+- File: `/public/icons/rocket.svg`
+- ViewBox: 24x24
+- Colors: Red (#FF6B6B, #FF3333), Teal (#27C4A1)
+
+#### Design Philosophy
+
+**Kid-Friendly:**
+- Bright, cheerful colors that appeal to ages 9-13
+- Simple, recognizable shapes
+- High contrast for visibility
+
+**Accessible:**
+- All icons have role="img"
+- Customizable aria-label for context
+- Empty alt text on img element (decorative)
+- Keyboard interaction support via HTML attributes
+
+**Flexible:**
+- Size prop for any dimension
+- Accepts all HTML div attributes
+- Can be wrapped in buttons or links
+- className support for custom styling
+
+#### Test Coverage
+
+**Test Stats:**
+- Total tests: 39 (13 per icon)
+- Statement coverage: 71.42%
+- Branch coverage: 100%
+- Function coverage: 100%
+- Line coverage: 80%
+
+**Test Categories:**
+1. **Rendering** (7 tests per icon):
+   - Default rendering
+   - Default size (24px)
+   - Custom size
+   - Default aria-label
+   - Custom aria-label
+   - Custom className
+   - Correct SVG file loaded
+
+2. **Accessibility** (4 tests per icon):
+   - role="img" attribute
+   - aria-label for screen readers
+   - Empty alt text (decorative image)
+   - Ref forwarding
+
+3. **Interaction** (2 tests per icon):
+   - onClick handler support
+   - Additional HTML attributes
+
+#### Usage Examples
+
+```tsx
+import { Star, Trophy, Rocket } from '@/components/icons';
+
+// Correct answer feedback
+<Star size={48} ariaLabel="Correct answer!" />
+
+// New record celebration
+<Trophy size={64} ariaLabel="New record trophy" className="animate-bounce" />
+
+// Start quiz button
+<button>
+  <Rocket size={32} ariaLabel="Launch quiz" />
+  Start Quiz!
+</button>
+```
+
+**Implementation:** [src/components/icons/](../src/components/icons/)
+
+### 5.9. Practice Mode
 
 **Logic:**
 
@@ -534,7 +687,7 @@ localStorage.setItem(
 );
 ```
 
-### 5.5 Global Word List Overlay
+### 5.10. Global Word List Overlay
 
 **Features:**
 
