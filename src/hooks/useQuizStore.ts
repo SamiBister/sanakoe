@@ -284,17 +284,29 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
    * Exit practice mode and return to normal mode
    *
    * Clears practice target and returns to normal quiz flow.
-   * Word remains as current, user will answer it again in normal mode.
+   * Moves the practiced word to the back of the queue so user
+   * sees other words before encountering it again.
    */
   exitPracticeMode: () => {
     const { session } = get();
-    if (!session || session.mode !== 'practice') return;
+    if (!session || session.mode !== 'practice' || !session.practiceTarget) return;
+
+    const practicedWordId = session.practiceTarget.id;
+
+    // Move the practiced word to the back of the queue
+    const filteredIds = session.unresolvedIds.filter((id) => id !== practicedWordId);
+    const newUnresolvedIds = [...filteredIds, practicedWordId];
+
+    // Set next word as current (the first one after removing practiced word)
+    const nextId = filteredIds[0] || practicedWordId; // If only one word left, show it again
 
     set({
       session: {
         ...session,
         mode: 'normal',
         practiceTarget: undefined,
+        unresolvedIds: newUnresolvedIds,
+        currentId: nextId,
       },
     });
   },

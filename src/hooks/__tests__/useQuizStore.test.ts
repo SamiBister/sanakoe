@@ -534,16 +534,53 @@ describe('useQuizStore', () => {
       expect(result.current.session?.practiceTarget).toBeUndefined();
     });
 
-    it('keeps current word (user will answer again)', () => {
+    it('moves practiced word to back of queue and advances to next word', () => {
       const { result } = renderHook(() => useQuizStore());
-      const currentBefore = result.current.session?.currentId;
 
+      // Setup: have at least 2 words, be in practice mode for the first one
+      const words = [createTestWord('1', 'dog', 'koira'), createTestWord('2', 'cat', 'kissa')];
+
+      act(() => {
+        result.current.loadWords(words);
+        result.current.startQuiz();
+        // Enter practice mode for word 1
+        result.current.enterPracticeMode('1');
+      });
+
+      // Exit practice mode
       act(() => {
         result.current.exitPracticeMode();
       });
 
-      const currentAfter = result.current.session?.currentId;
-      expect(currentAfter).toBe(currentBefore);
+      // Current should advance to the next word (word 2)
+      expect(result.current.session?.currentId).toBe('2');
+
+      // Word 1 should be at the back of the queue
+      const unresolvedIds = result.current.session?.unresolvedIds;
+      expect(unresolvedIds).toEqual(['2', '1']);
+    });
+
+    it('keeps same word if it is the only word in queue', () => {
+      const { result } = renderHook(() => useQuizStore());
+
+      // Setup: only 1 word, be in practice mode for it
+      const words = [createTestWord('1', 'dog', 'koira')];
+
+      act(() => {
+        result.current.loadWords(words);
+        result.current.startQuiz();
+        // Enter practice mode for word 1
+        result.current.enterPracticeMode('1');
+      });
+
+      // Exit practice mode
+      act(() => {
+        result.current.exitPracticeMode();
+      });
+
+      // Current should still be word 1 (the only word)
+      expect(result.current.session?.currentId).toBe('1');
+      expect(result.current.session?.unresolvedIds).toEqual(['1']);
     });
 
     it('does nothing if not in practice mode', () => {
