@@ -1,28 +1,140 @@
-import LanguageSelector from "@/components/LanguageSelector";
-import { useTranslations } from "next-intl";
+'use client';
+
+import LanguageSelector from '@/components/LanguageSelector';
+import { ManualEntryTable } from '@/components/ManualEntryTable';
+import { WordListUpload } from '@/components/WordListUpload';
+import { Rocket } from '@/components/icons';
+import { Button } from '@/components/ui';
+import { useQuizStore } from '@/hooks/useQuizStore';
+import type { WordItem } from '@/lib/types';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+type InputMode = 'none' | 'upload' | 'manual';
 
 export default function Home() {
-  const t = useTranslations("start");
+  const t = useTranslations('start');
+  const router = useRouter();
+  const loadWords = useQuizStore((state) => state.loadWords);
+  const startQuiz = useQuizStore((state) => state.startQuiz);
+
+  const [inputMode, setInputMode] = useState<InputMode>('none');
+  const [words, setWords] = useState<WordItem[]>([]);
+
+  const handleWordsLoaded = (loadedWords: WordItem[]) => {
+    setWords(loadedWords);
+  };
+
+  const handleStartQuiz = () => {
+    if (words.length === 0) return;
+
+    // Load words into quiz store and start quiz
+    loadWords(words);
+    startQuiz();
+
+    // Navigate to quiz screen
+    router.push('/quiz');
+  };
+
+  const wordCount = words.length;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-primary-50 via-white to-secondary-50">
+      {/* Language Selector */}
       <div className="absolute top-4 right-4">
         <LanguageSelector />
       </div>
-      <div className="max-w-2xl text-center">
-        <h1 className="text-4xl font-bold mb-4 text-primary-500">
-          🚀 {t("title")}
-        </h1>
-        <p className="text-xl text-gray-700 mb-2">{t("subtitle")}</p>
-        <p className="text-lg text-gray-600 mb-8">{t("description")}</p>
-        <div className="mt-8 p-6 bg-white rounded-2xl shadow-medium">
-          <p className="text-gray-600">
-            Project initialization complete. i18n system configured!
-          </p>
-          <p className="text-sm text-gray-500 mt-2">
-            Ready to implement features!
-          </p>
+
+      {/* Main Content */}
+      <div className="w-full max-w-4xl">
+        {/* Hero Section */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <Rocket className="w-20 h-20 text-primary-500" />
+          </div>
+          <h1 className="text-5xl font-bold mb-4 text-primary-600">{t('title')}</h1>
+          <p className="text-2xl text-gray-700 mb-2">{t('subtitle')}</p>
+          <p className="text-lg text-gray-600">{t('description')}</p>
         </div>
+
+        {/* Input Mode Selection */}
+        {inputMode === 'none' && (
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => setInputMode('upload')}
+              className="text-xl py-6 px-8 min-w-[240px]"
+            >
+              📁 {t('uploadButton')}
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => setInputMode('manual')}
+              className="text-xl py-6 px-8 min-w-[240px]"
+            >
+              ✏️ {t('manualButton')}
+            </Button>
+          </div>
+        )}
+
+        {/* Word Input Components */}
+        {inputMode === 'upload' && (
+          <div className="mb-8">
+            <div className="flex justify-center mb-4">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setInputMode('none');
+                  setWords([]);
+                }}
+              >
+                ← Back
+              </Button>
+            </div>
+            <WordListUpload onWordsLoaded={handleWordsLoaded} />
+          </div>
+        )}
+
+        {inputMode === 'manual' && (
+          <div className="mb-8">
+            <div className="flex justify-center mb-4">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setInputMode('none');
+                  setWords([]);
+                }}
+              >
+                ← Back
+              </Button>
+            </div>
+            <ManualEntryTable onWordsLoaded={handleWordsLoaded} />
+          </div>
+        )}
+
+        {/* Word Count and Start Button */}
+        {inputMode !== 'none' && (
+          <div className="mt-8 text-center">
+            <div className="mb-6">
+              <p className="text-2xl font-semibold text-gray-700">
+                {t('wordCount', { count: wordCount })}
+              </p>
+            </div>
+
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={handleStartQuiz}
+              disabled={wordCount === 0}
+              className="text-2xl py-6 px-12 min-w-[280px]"
+            >
+              🚀 {t('startQuiz')}
+            </Button>
+          </div>
+        )}
       </div>
     </main>
   );

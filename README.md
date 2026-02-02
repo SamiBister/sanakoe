@@ -131,7 +131,8 @@ npm run test:coverage
 - Icon Components: 39 tests, 71.42% coverage ✅
 - WordListUpload Component: 21 tests, 85.89% coverage ✅
 - ManualEntryTable Component: 37 tests, 95.71% coverage ✅
-- **Total**: 417 tests, all passing ✅
+- Start Screen (Home Page): 17 tests, 90.9% coverage ✅
+- **Total**: 434 tests, all passing ✅
 
 ## 🚢 Deployment
 
@@ -151,7 +152,7 @@ Contributions are welcome! Please read the specification and implementation plan
 
 ## ✨ Status
 
-**Current Phase**: Word List Input (Phase 5) 🚧
+**Current Phase**: Quiz Flow Screens (Phase 6) 🚧
 
 **Completed:**
 
@@ -170,13 +171,18 @@ Contributions are welcome! Please read the specification and implementation plan
 - ✅ **Phase 4**: UI Components Library
   - Task 4.1: Base UI Components Implemented (87.38% coverage) ✅
   - Task 4.2: SVG Icon Components Implemented (71.42% coverage) ✅
-- 🚧 **Phase 5**: Word List Input
+- ✅ **Phase 5**: Word List Input
   - Task 5.1: CSV Upload Component Implemented (85.89% coverage, 21 tests) ✅
   - Task 5.2: Manual Entry Table Component Implemented (95.71% coverage, 37 tests) ✅
+- 🚧 **Phase 6**: Quiz Flow Screens
+  - Task 6.1: Start Screen Implemented (90.9% coverage, 17 tests) ✅
+  - Task 6.2: Quiz Screen (Normal Mode) - Next
+  - Task 6.3: Quiz Screen (Practice Mode)
+  - Task 6.4: Results Screen
 
 **Next Steps**:
 
-- Create quiz screen components (Phase 6)
+- Implement quiz screen (normal mode) (Phase 6 Task 6.2)
 - Implement global features (Phase 7)
 
 **i18n Features Implemented:**
