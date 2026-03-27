@@ -120,17 +120,11 @@ export function ResultsCard({
 
   // Determine motivation message based on records
   const getMotivationMessage = (): string => {
-    if (isNewTriesRecord && isNewTimeRecord) {
-      return t('motivationBoth');
-    }
-    if (isNewTriesRecord) {
-      return t('motivationFewer');
-    }
-    if (isNewTimeRecord) {
-      return t('motivationFaster');
-    }
-    // Default motivation for no new record
-    return t('motivationFewer');
+    if (isNewTriesRecord && isNewTimeRecord) return t('motivationBoth');
+    if (isNewTriesRecord) return t('motivationFewer');
+    if (isNewTimeRecord) return t('motivationFaster');
+    if (previousRecords) return t('motivationKeepGoing');
+    return t('motivationFirst');
   };
 
   return (
@@ -181,7 +175,7 @@ export function ResultsCard({
               <p className="text-3xl font-bold text-secondary-700">{totalTries}</p>
               {previousRecords?.bestTries !== undefined && (
                 <p className="text-xs text-secondary-500 mt-1">
-                  {t('previousBest')}: {previousRecords.bestTries}
+                  {isNewTriesRecord ? t('previousBest') : t('bestRecord')}: {previousRecords.bestTries}
                 </p>
               )}
             </div>
@@ -192,7 +186,7 @@ export function ResultsCard({
               <p className="text-3xl font-bold text-green-700">{formatTime(totalTimeMs)}</p>
               {previousRecords?.bestTimeMs !== undefined && (
                 <p className="text-xs text-green-500 mt-1">
-                  {t('previousBest')}: {formatTime(previousRecords.bestTimeMs)}
+                  {isNewTimeRecord ? t('previousBest') : t('bestRecord')}: {formatTime(previousRecords.bestTimeMs)}
                 </p>
               )}
             </div>

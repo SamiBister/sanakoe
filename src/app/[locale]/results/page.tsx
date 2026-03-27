@@ -5,10 +5,10 @@ import { ResultsCard } from '@/components/ResultsCard';
 import { useQuizStore } from '@/hooks/useQuizStore';
 import { generateListFingerprint } from '@/lib/hash';
 import { loadRecords, saveRecords } from '@/lib/storage';
-import type { ListRecords, WordItem } from '@/lib/types';
+import type { ListRecords } from '@/lib/types';
 import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Results Screen
@@ -42,16 +42,21 @@ export default function ResultsPage() {
 
   // Quiz store state
   const session = useQuizStore((state) => state.session);
-  const startQuiz = useQuizStore((state) => state.startQuiz);
+  const restartQuiz = useQuizStore((state) => state.restartQuiz);
   const resetQuiz = useQuizStore((state) => state.resetQuiz);
 
   // Local state
+  const isRestarting = useRef(false);
+  // Snapshot of records as they existed BEFORE this run — captured once on mount.
+  // Using a ref ensures the comparison value never changes mid-render even after
+  // the save effect writes the new record back to localStorage.
+  const previousRecordsSnapshot = useRef<ListRecords | null | undefined>(undefined);
   const [previousRecords, setPreviousRecords] = useState<ListRecords | null>(null);
   const [recordsSaved, setRecordsSaved] = useState(false);
 
   // Redirect to start if no completed session
   useEffect(() => {
-    if (!session || !session.endTimeMs) {
+    if (!isRestarting.current && (!session || !session.endTimeMs)) {
       router.push(`/${locale}`);
     }
   }, [session, router, locale]);
@@ -81,37 +86,43 @@ export default function ResultsPage() {
     return generateListFingerprint(session.words);
   }, [session]);
 
-  // Load previous records
+  // Load previous records once on mount, before any saving occurs.
+  // The fingerprint is derived from session words which don't change while
+  // the results page is shown, so running this only once is correct.
   useEffect(() => {
     if (!listFingerprint) return;
+    if (previousRecordsSnapshot.current !== undefined) return; // already loaded
 
     try {
       const records = loadRecords();
-      const listRecords = records[listFingerprint] || null;
+      const listRecords = records[listFingerprint] ?? null;
+      previousRecordsSnapshot.current = listRecords;
       setPreviousRecords(listRecords);
     } catch (error) {
       console.error('Failed to load records:', error);
+      previousRecordsSnapshot.current = null;
       setPreviousRecords(null);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listFingerprint]);
 
-  // Detect new records
+  // Detect new records — compare against the pre-run snapshot, not the live
+  // state, so saving the new record doesn't affect the comparison.
   const { isNewTriesRecord, isNewTimeRecord } = useMemo(() => {
-    if (!results || !listFingerprint) {
+    if (!results || !listFingerprint || previousRecordsSnapshot.current === undefined) {
       return { isNewTriesRecord: false, isNewTimeRecord: false };
     }
 
     const { totalTries, totalTimeMs } = results;
+    const prev = previousRecordsSnapshot.current;
 
     // Check tries record
-    const isNewTries =
-      previousRecords?.bestTries === undefined || totalTries < previousRecords.bestTries;
+    const isNewTries = prev?.bestTries === undefined || totalTries < prev.bestTries;
 
     // Check time record (only if tries are equal or better)
     const isNewTime =
-      previousRecords?.bestTimeMs === undefined ||
-      (totalTries <= (previousRecords.bestTries ?? Infinity) &&
-        totalTimeMs < previousRecords.bestTimeMs);
+      prev?.bestTimeMs === undefined ||
+      (totalTries <= (prev.bestTries ?? Infinity) && totalTimeMs < prev.bestTimeMs);
 
     return {
       isNewTriesRecord: isNewTries,
@@ -122,6 +133,8 @@ export default function ResultsPage() {
   // Save new records to localStorage (only once)
   useEffect(() => {
     if (!results || !listFingerprint || recordsSaved) return;
+    // Wait until the previousRecords snapshot has been loaded
+    if (previousRecordsSnapshot.current === undefined) return;
 
     // Only save if there's a new record or no previous records
     if (!isNewTriesRecord && !isNewTimeRecord && previousRecords) return;
@@ -154,17 +167,8 @@ export default function ResultsPage() {
   // Handle restart quiz (same words, reshuffled)
   const handleRestart = () => {
     if (session) {
-      // Reset words to initial state but keep the same words
-      const resetWords: WordItem[] = session.words.map((word) => ({
-        ...word,
-        attempts: 0,
-        firstTryFailed: false,
-        resolved: false,
-      }));
-
-      // Use the loadWords action to reset and then start
-      useQuizStore.getState().loadWords(resetWords);
-      startQuiz();
+      isRestarting.current = true;
+      restartQuiz();
       router.push(`/${locale}/quiz`);
     }
   };
@@ -194,7 +198,7 @@ export default function ResultsPage() {
           totalTries={results.totalTries}
           totalTimeMs={results.totalTimeMs}
           wordsNotFirstTry={results.wordsNotFirstTry}
-          previousRecords={previousRecords}
+          previousRecords={previousRecordsSnapshot.current ?? null}
           isNewTriesRecord={isNewTriesRecord}
           isNewTimeRecord={isNewTimeRecord}
           onRestart={handleRestart}

@@ -7,10 +7,11 @@ import { WordListUpload } from '@/components/WordListUpload';
 import { Rocket } from '@/components/icons';
 import { Button } from '@/components/ui';
 import { useQuizStore } from '@/hooks/useQuizStore';
+import { loadWordList, saveWordList } from '@/lib/storage';
 import type { WordItem } from '@/lib/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type InputMode = 'none' | 'upload' | 'manual';
 
@@ -23,22 +24,45 @@ export default function Home() {
 
   const [inputMode, setInputMode] = useState<InputMode>('none');
   const [words, setWords] = useState<WordItem[]>([]);
+  const [savedWords, setSavedWords] = useState<WordItem[] | null>(null);
+
+  // Load persisted word list on mount
+  useEffect(() => {
+    try {
+      const stored = loadWordList();
+      if (stored && stored.length > 0) {
+        setSavedWords(stored);
+      }
+    } catch {
+      // Ignore storage errors — user just won't see a saved list
+    }
+  }, []);
 
   const handleWordsLoaded = useCallback((loadedWords: WordItem[]) => {
     setWords(loadedWords);
+    // Persist so the user can reuse the list next time
+    try {
+      saveWordList(loadedWords);
+      setSavedWords(loadedWords);
+    } catch {
+      // Non-fatal — quiz still works, words just won't be persisted
+    }
   }, []);
 
-  const handleStartQuiz = () => {
-    if (words.length === 0) {
-      return;
-    }
-
-    // Load words into quiz store and start quiz
-    loadWords(words);
+  const handleStartQuiz = (wordsToUse: WordItem[] = words) => {
+    if (wordsToUse.length === 0) return;
+    loadWords(wordsToUse);
     startQuiz();
-
-    // Navigate to quiz screen (include locale prefix)
     router.push(`/${locale}/quiz`);
+  };
+
+  const handleClearSaved = () => {
+    try {
+      saveWordList([]);
+    } catch {
+      // ignore
+    }
+    setSavedWords(null);
   };
 
   const wordCount = words.length;
@@ -62,11 +86,49 @@ export default function Home() {
           <p className="text-lg text-gray-600">{t('description')}</p>
         </div>
 
+        {/* Saved word list — shown when available and no input mode chosen yet */}
+        {inputMode === 'none' && savedWords && savedWords.length > 0 && (
+          <div className="mb-6 p-5 bg-primary-50 border-2 border-primary-200 rounded-2xl">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <p className="text-lg font-semibold text-primary-700">
+                  💾 {t('savedList', { count: savedWords.length })}
+                </p>
+                <p className="text-sm text-primary-500 mt-1">
+                  {savedWords
+                    .slice(0, 3)
+                    .map((w) => w.prompt)
+                    .join(', ')}
+                  {savedWords.length > 3 ? ` +${savedWords.length - 3}` : ''}
+                </p>
+              </div>
+              <div className="flex gap-3 shrink-0">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  onClick={() => handleStartQuiz(savedWords)}
+                  className="text-lg py-4 px-6"
+                >
+                  🚀 {t('startWithSaved')}
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="md"
+                  onClick={handleClearSaved}
+                  className="text-sm"
+                >
+                  {t('clearSaved')}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Input Mode Selection */}
         {inputMode === 'none' && (
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Button
-              variant="primary"
+              variant={savedWords ? 'secondary' : 'primary'}
               size="lg"
               onClick={() => setInputMode('upload')}
               className="text-xl py-6 px-8 min-w-[240px]"
@@ -74,7 +136,7 @@ export default function Home() {
               📁 {t('uploadButton')}
             </Button>
             <Button
-              variant="primary"
+              variant={savedWords ? 'secondary' : 'primary'}
               size="lg"
               onClick={() => setInputMode('manual')}
               className="text-xl py-6 px-8 min-w-[240px]"
@@ -95,7 +157,7 @@ export default function Home() {
                   setWords([]);
                 }}
               >
-                ← Back
+                ← {t('back')}
               </Button>
             </div>
             <WordListUpload onWordsLoaded={handleWordsLoaded} />
@@ -112,7 +174,7 @@ export default function Home() {
                   setWords([]);
                 }}
               >
-                ← Back
+                ← {t('back')}
               </Button>
             </div>
             <ManualEntryTable onWordsLoaded={handleWordsLoaded} />
@@ -132,7 +194,7 @@ export default function Home() {
               type="button"
               variant="primary"
               size="lg"
-              onClick={handleStartQuiz}
+              onClick={() => handleStartQuiz()}
               disabled={wordCount === 0}
               className="text-2xl py-6 px-12 min-w-[280px]"
             >

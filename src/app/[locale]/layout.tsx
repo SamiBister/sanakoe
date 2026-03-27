@@ -9,6 +9,10 @@ import '../globals.css';
 export const metadata: Metadata = {
   title: 'Sanakoe - Language Quiz for Kids',
   description: 'Practice vocabulary for school language tests with a fun, gamified experience',
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 type Props = {

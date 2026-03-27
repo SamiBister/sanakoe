@@ -6,17 +6,28 @@
     "uploadButton": "Upload CSV",
     "manualButton": "Enter Manually",
     "startQuiz": "Start Quiz",
-    "wordCount": "{count, plural, =0 {No words} =1 {1 word} other {# words}} ready"
+    "wordCount": "{count, plural, =0 {No words} =1 {1 word} other {# words}} ready",
+    "savedList": "{count, plural, =1 {1 word saved} other {# words saved}} from last time",
+    "startWithSaved": "Start Quiz",
+    "clearSaved": "Clear",
+    "back": "Back"
   },
   "upload": {
     "title": "Upload Word List",
-    "dragDrop": "Drag and drop a CSV file here",
+    "dragDrop": "Drag and drop your CSV file here",
     "or": "or",
     "browse": "Browse files",
-    "fileTypes": "Accepted: .csv, .txt",
-    "parsing": "Parsing file...",
-    "success": "File uploaded successfully!",
-    "preview": "Preview (first 5 words):",
+    "chooseFile": "Choose File",
+    "fileTypes": "Supported formats: CSV, TXT (comma or semicolon separated)",
+    "parsing": "Parsing {fileName}...",
+    "uploadFailed": "Upload Failed",
+    "tryAgain": "Try Again",
+    "success": "Upload Successful!",
+    "preview": "Preview:",
+    "loadedWords": "{count, plural, =1 {Loaded 1 word} other {Loaded # words}}",
+    "andMore": "...and {count, plural, =1 {1 more word} other {# more words}}",
+    "uploadDifferent": "Upload Different File",
+    "invalidFileType": "Please upload a CSV or TXT file",
     "error": "Error parsing file",
     "errorEmpty": "The file appears to be empty",
     "errorFormat": "Invalid file format. Please upload a CSV with two columns.",
@@ -29,7 +40,7 @@
     "clearAll": "Clear All",
     "clearConfirm": "Are you sure you want to clear all entries?",
     "validCount": "{count, plural, =0 {No complete pairs} =1 {1 complete pair} other {# complete pairs}}",
-    "instructions": "Fill in both columns. Press Tab to move between cells. New rows are added automatically."
+    "instructions": "💡 Fill in both columns. Tab moves forward, Shift+Tab moves back. You can also paste tab-separated columns directly from a spreadsheet."
   },
   "quiz": {
     "progress": "{resolved} / {total}",
@@ -84,7 +95,9 @@
     "restart": "Restart Quiz",
     "newList": "New Word List",
     "previousBest": "Previous best",
-    "currentScore": "Your score"
+    "bestRecord": "Best",
+    "motivationKeepGoing": "Good effort! Can you beat your record next time?",
+    "motivationFirst": "Great start! Come back to beat your score!"
   },
   "wordList": {
     "button": "Word List",

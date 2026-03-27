@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { WordItem } from '@/lib/types';
 import { nanoid } from 'nanoid';
+import { useTranslations } from 'next-intl';
 import React, { ClipboardEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 export interface ManualEntryTableProps {
@@ -35,6 +36,8 @@ const STORAGE_KEY = 'sanakoe_manual_entry';
  */
 export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTableProps>(
   ({ onWordsLoaded, className = '' }, ref) => {
+    const t = useTranslations('manual');
+    const tCommon = useTranslations('common');
     const [rows, setRows] = useState<TableRow[]>([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const inputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
@@ -305,16 +308,15 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
         {/* Header with valid row count */}
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-600">
-            <span className="font-semibold text-primary-600">{validRowCount}</span> valid{' '}
-            {validRowCount === 1 ? 'word' : 'words'} entered
+            {t('validCount', { count: validRowCount })}
           </div>
           <Button
             variant="danger"
             onClick={handleClearAll}
             disabled={rows.every((row) => row.prompt === '' && row.answer === '')}
-            aria-label="Clear all entries"
+            aria-label={t('clearAll')}
           >
-            Clear All
+            {t('clearAll')}
           </Button>
         </div>
 
@@ -324,10 +326,10 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
             <thead>
               <tr className="bg-gray-50 border-b-2 border-gray-200">
                 <th className="p-2 sm:p-3 text-left font-semibold text-gray-700 text-sm sm:text-base">
-                  Prompt
+                  {t('headerWord')}
                 </th>
                 <th className="p-2 sm:p-3 text-left font-semibold text-gray-700 text-sm sm:text-base">
-                  Answer
+                  {t('headerTranslation')}
                 </th>
               </tr>
             </thead>
@@ -349,8 +351,8 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
                       onKeyDown={(e) => handleKeyDown(e, index, 'prompt')}
                       onPaste={(e) => handlePaste(e, index, 'prompt')}
                       className="w-full px-2 sm:px-3 py-2 min-h-[44px] text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder={index === 0 ? 'Enter word...' : ''}
-                      aria-label={`Prompt for row ${index + 1}`}
+                      placeholder={index === 0 ? t('headerWord') : ''}
+                      aria-label={`${t('headerWord')} ${index + 1}`}
                     />
                   </td>
                   <td className="p-1.5 sm:p-2">
@@ -368,8 +370,8 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
                       onKeyDown={(e) => handleKeyDown(e, index, 'answer')}
                       onPaste={(e) => handlePaste(e, index, 'answer')}
                       className="w-full px-2 sm:px-3 py-2 min-h-[44px] text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder={index === 0 ? 'Enter translation...' : ''}
-                      aria-label={`Answer for row ${index + 1}`}
+                      placeholder={index === 0 ? t('headerTranslation') : ''}
+                      aria-label={`${t('headerTranslation')} ${index + 1}`}
                     />
                   </td>
                 </tr>
@@ -380,10 +382,7 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
 
         {/* Keyboard hints */}
         <div className="text-xs text-gray-500 italic">
-          <p>
-            💡 Tip: Use Tab to move to the next cell, Shift+Tab to go back, Enter works like Tab.
-          </p>
-          <p>💡 Paste tab-separated values to quickly fill multiple rows.</p>
+          <p>{t('instructions')}</p>
         </div>
 
         {/* Confirmation Dialog */}
@@ -398,20 +397,19 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
             <Card className="max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
               <CardHeader>
                 <h3 id="confirm-dialog-title" className="text-xl font-bold text-gray-800">
-                  Clear All Entries?
+                  {t('clearConfirm')}
                 </h3>
               </CardHeader>
               <CardBody>
                 <p className="text-gray-600 mb-6">
-                  This will delete all {validRowCount > 0 ? validRowCount : ''} entered words. This
-                  action cannot be undone.
+                  {t('clearConfirm')}
                 </p>
                 <div className="flex gap-3 justify-end">
                   <Button variant="secondary" onClick={cancelClearAll}>
-                    Cancel
+                    {tCommon('cancel')}
                   </Button>
                   <Button variant="danger" onClick={confirmClearAll}>
-                    Clear All
+                    {t('clearAll')}
                   </Button>
                 </div>
               </CardBody>

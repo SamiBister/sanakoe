@@ -32,6 +32,7 @@ interface QuizStore {
   exitPracticeMode: () => void;
   endQuiz: () => void;
   resetQuiz: () => void;
+  restartQuiz: () => void;
 
   // Selectors
   getCurrentWord: () => WordItem | null;
@@ -338,6 +339,38 @@ export const useQuizStore = create<QuizStore>((set, get) => ({
    */
   resetQuiz: () => {
     set({ session: null });
+  },
+
+  /**
+   * Restart quiz with the same words
+   *
+   * Resets all word progress and immediately starts a new quiz session
+   * in a single atomic update, so the session never passes through an
+   * intermediate state that could trigger navigation guards.
+   */
+  restartQuiz: () => {
+    const { session } = get();
+    if (!session) return;
+
+    const resetWords = session.words.map((word) => ({
+      ...word,
+      attempts: 0,
+      firstTryFailed: false,
+      resolved: false,
+    }));
+
+    const shuffledIds = shuffleArray(resetWords.map((w) => w.id));
+
+    set({
+      session: {
+        words: resetWords,
+        unresolvedIds: shuffledIds,
+        currentId: shuffledIds[0] || null,
+        tries: 0,
+        startTimeMs: Date.now(),
+        mode: 'normal',
+      },
+    });
   },
 
   /**

@@ -256,7 +256,7 @@ export function PracticeCard({
                   disabled={!answer.trim()}
                   className="text-xl py-5 px-10 min-w-[180px] bg-purple-600 hover:bg-purple-700"
                 >
-                  {tQuiz('checkButton')}
+                  {tQuiz('submit')}
                 </Button>
               </div>
             </form>

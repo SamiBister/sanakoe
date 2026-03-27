@@ -6,17 +6,28 @@
     "uploadButton": "Lataa CSV",
     "manualButton": "Syötä Käsin",
     "startQuiz": "Aloita Koe",
-    "wordCount": "{count, plural, =0 {Ei sanoja} =1 {1 sana} other {# sanaa}} valmiina"
+    "wordCount": "{count, plural, =0 {Ei sanoja} =1 {1 sana} other {# sanaa}} valmiina",
+    "savedList": "{count, plural, =1 {1 sana tallennettuna} other {# sanaa tallennettuna}} viime kerralta",
+    "startWithSaved": "Aloita Koe",
+    "clearSaved": "Tyhjennä",
+    "back": "Takaisin"
   },
   "upload": {
     "title": "Lataa Sanalista",
     "dragDrop": "Vedä ja pudota CSV-tiedosto tähän",
     "or": "tai",
     "browse": "Selaa tiedostoja",
-    "fileTypes": "Hyväksytyt: .csv, .txt",
-    "parsing": "Käsitellään tiedostoa...",
-    "success": "Tiedosto ladattu onnistuneesti!",
-    "preview": "Esikatselu (5 ensimmäistä sanaa):",
+    "chooseFile": "Valitse tiedosto",
+    "fileTypes": "Tuetut muodot: CSV, TXT (pilkku- tai puolipisteerotteinen)",
+    "parsing": "Käsitellään {fileName}...",
+    "uploadFailed": "Lataus epäonnistui",
+    "tryAgain": "Yritä uudelleen",
+    "success": "Lataus onnistui!",
+    "preview": "Esikatselu:",
+    "loadedWords": "{count, plural, =1 {Ladattu 1 sana} other {Ladattu # sanaa}}",
+    "andMore": "...ja {count, plural, =1 {1 sana lisää} other {# sanaa lisää}}",
+    "uploadDifferent": "Lataa eri tiedosto",
+    "invalidFileType": "Lataa CSV- tai TXT-tiedosto",
     "error": "Virhe tiedoston käsittelyssä",
     "errorEmpty": "Tiedosto näyttää olevan tyhjä",
     "errorFormat": "Virheellinen tiedostomuoto. Lataa CSV kahdella sarakkeella.",
@@ -29,7 +40,7 @@
     "clearAll": "Tyhjennä Kaikki",
     "clearConfirm": "Haluatko varmasti tyhjentää kaikki merkinnät?",
     "validCount": "{count, plural, =0 {Ei valmiita pareja} =1 {1 valmis pari} other {# valmista paria}}",
-    "instructions": "Täytä molemmat sarakkeet. Paina Tab siirtyäksesi solujen välillä. Uusia rivejä lisätään automaattisesti."
+    "instructions": "💡 Täytä molemmat sarakkeet. Paina Tab siirtyäksesi solujen välillä, Shift+Tab taaksepäin. Voit myös liittää taulukosta kopioituja sarakkeita suoraan."
   },
   "quiz": {
     "progress": "{resolved} / {total}",
@@ -84,7 +95,9 @@
     "restart": "Aloita Koe Uudelleen",
     "newList": "Uusi Sanalista",
     "previousBest": "Edellinen paras",
-    "currentScore": "Tuloksesi"
+    "bestRecord": "Ennätys",
+    "motivationKeepGoing": "Hyvä yritys! Pystytkö parantamaan ennätystäsi ensi kerralla?",
+    "motivationFirst": "Hieno alku! Palaa takaisin parantamaan tulostasi!"
   },
   "wordList": {
     "button": "Sanat",

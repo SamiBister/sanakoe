@@ -100,7 +100,7 @@ export function ProgressHeader({
       {/* Tries */}
       <div className="flex items-center gap-2">
         <span className="text-gray-600 text-lg font-medium">
-          {t('tries')}: <span className="font-bold text-primary-600">{tries}</span>
+          {t('tries', { count: tries })}
         </span>
       </div>
 
