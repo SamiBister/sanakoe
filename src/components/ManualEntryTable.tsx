@@ -306,7 +306,7 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
     return (
       <div ref={ref} className={`space-y-4 ${className}`}>
         {/* Header with valid row count */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-gray-600">
             {t('validCount', { count: validRowCount })}
           </div>
@@ -320,8 +320,46 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
           </Button>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+        {/* Mobile: stacked card layout */}
+        <div className="sm:hidden space-y-2">
+          {rows.map((row, index) => (
+            <div key={row.id} className="flex gap-2 items-center bg-gray-50 rounded-xl p-2">
+              <span className="text-xs text-gray-400 w-5 shrink-0 text-center">{index + 1}</span>
+              <input
+                ref={(el) => {
+                  if (el) inputRefs.current.set(`${row.id}-prompt`, el);
+                  else inputRefs.current.delete(`${row.id}-prompt`);
+                }}
+                type="text"
+                value={row.prompt}
+                onChange={(e) => updateCell(row.id, 'prompt', e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, index, 'prompt')}
+                onPaste={(e) => handlePaste(e, index, 'prompt')}
+                className="flex-1 min-w-0 px-3 py-2 min-h-[44px] text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder={index === 0 ? t('headerWord') : ''}
+                aria-label={`${t('headerWord')} ${index + 1}`}
+              />
+              <span className="text-gray-400 shrink-0">→</span>
+              <input
+                ref={(el) => {
+                  if (el) inputRefs.current.set(`${row.id}-answer`, el);
+                  else inputRefs.current.delete(`${row.id}-answer`);
+                }}
+                type="text"
+                value={row.answer}
+                onChange={(e) => updateCell(row.id, 'answer', e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, index, 'answer')}
+                onPaste={(e) => handlePaste(e, index, 'answer')}
+                className="flex-1 min-w-0 px-3 py-2 min-h-[44px] text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                placeholder={index === 0 ? t('headerTranslation') : ''}
+                aria-label={`${t('headerTranslation')} ${index + 1}`}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: table layout */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full border-collapse min-w-[400px]">
             <thead>
               <tr className="bg-gray-50 border-b-2 border-gray-200">
@@ -339,11 +377,8 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
                   <td className="p-1.5 sm:p-2">
                     <input
                       ref={(el) => {
-                        if (el) {
-                          inputRefs.current.set(`${row.id}-prompt`, el);
-                        } else {
-                          inputRefs.current.delete(`${row.id}-prompt`);
-                        }
+                        if (el) inputRefs.current.set(`${row.id}-prompt`, el);
+                        else inputRefs.current.delete(`${row.id}-prompt`);
                       }}
                       type="text"
                       value={row.prompt}
@@ -358,11 +393,8 @@ export const ManualEntryTable = React.forwardRef<HTMLDivElement, ManualEntryTabl
                   <td className="p-1.5 sm:p-2">
                     <input
                       ref={(el) => {
-                        if (el) {
-                          inputRefs.current.set(`${row.id}-answer`, el);
-                        } else {
-                          inputRefs.current.delete(`${row.id}-answer`);
-                        }
+                        if (el) inputRefs.current.set(`${row.id}-answer`, el);
+                        else inputRefs.current.delete(`${row.id}-answer`);
                       }}
                       type="text"
                       value={row.answer}

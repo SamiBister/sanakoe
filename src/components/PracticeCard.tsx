@@ -152,7 +152,7 @@ export function PracticeCard({
 
   return (
     <Card className={`max-w-2xl w-full ${className}`}>
-      <CardBody className="p-8 sm:p-12">
+      <CardBody className="p-4 sm:p-8 sm:p-12">
         {/* Practice Mode Header */}
         <div className="text-center mb-6">
           <div className="inline-flex items-center px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-lg font-semibold mb-4">
@@ -185,7 +185,7 @@ export function PracticeCard({
             {/* Correct Answer Display */}
             <div className="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl p-6 mb-6">
               <p className="text-sm text-purple-600 mb-2 font-medium">{t('correctAnswerLabel')}</p>
-              <p className="text-4xl sm:text-5xl font-bold text-purple-700 text-center">
+              <p className="text-2xl sm:text-4xl sm:text-5xl font-bold text-purple-700 text-center break-words">
                 {correctAnswer}
               </p>
             </div>
@@ -242,7 +242,7 @@ export function PracticeCard({
                   onKeyDown={handleKeyDown}
                   placeholder={t('typeHere')}
                   inputSize="lg"
-                  className="text-center text-2xl"
+                  className="text-center text-xl sm:text-2xl"
                   autoComplete="off"
                   aria-label={t('typeHere')}
                 />
@@ -254,7 +254,7 @@ export function PracticeCard({
                   variant="primary"
                   size="lg"
                   disabled={!answer.trim()}
-                  className="text-xl py-5 px-10 min-w-[180px] bg-purple-600 hover:bg-purple-700"
+                  className="w-full text-xl sm:text-xl sm:py-5 sm:px-10 sm:min-w-[180px] bg-purple-600 hover:bg-purple-700"
                 >
                   {tQuiz('submit')}
                 </Button>

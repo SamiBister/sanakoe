@@ -77,12 +77,12 @@ export default function Home() {
       {/* Main Content with Page Transition */}
       <PageTransition className="w-full max-w-4xl">
         {/* Hero Section */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 pt-10 sm:pt-0">
           <div className="flex justify-center mb-4">
             <Rocket className="w-20 h-20 text-primary-500" />
           </div>
-          <h1 className="text-5xl font-bold mb-4 text-primary-600">{t('title')}</h1>
-          <p className="text-2xl text-gray-700 mb-2">{t('subtitle')}</p>
+          <h1 className="text-3xl sm:text-5xl font-bold mb-4 text-primary-600">{t('title')}</h1>
+          <p className="text-xl sm:text-2xl text-gray-700 mb-2">{t('subtitle')}</p>
           <p className="text-lg text-gray-600">{t('description')}</p>
         </div>
 
@@ -131,7 +131,7 @@ export default function Home() {
               variant={savedWords ? 'secondary' : 'primary'}
               size="lg"
               onClick={() => setInputMode('upload')}
-              className="text-xl py-6 px-8 min-w-[240px]"
+              className="text-lg sm:text-xl py-6 px-8 w-full sm:min-w-[240px]"
             >
               📁 {t('uploadButton')}
             </Button>
@@ -139,7 +139,7 @@ export default function Home() {
               variant={savedWords ? 'secondary' : 'primary'}
               size="lg"
               onClick={() => setInputMode('manual')}
-              className="text-xl py-6 px-8 min-w-[240px]"
+              className="text-lg sm:text-xl py-6 px-8 w-full sm:min-w-[240px]"
             >
               ✏️ {t('manualButton')}
             </Button>
@@ -196,7 +196,7 @@ export default function Home() {
               size="lg"
               onClick={() => handleStartQuiz()}
               disabled={wordCount === 0}
-              className="text-2xl py-6 px-12 min-w-[280px]"
+              className="w-full text-xl sm:text-2xl sm:py-6 sm:px-12 sm:min-w-[280px]"
             >
               🚀 {t('startQuiz')}
             </Button>

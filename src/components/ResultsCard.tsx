@@ -129,7 +129,7 @@ export function ResultsCard({
 
   return (
     <Card className={`max-w-2xl w-full ${className}`}>
-      <CardBody className="p-8 sm:p-12">
+        <CardBody className="p-4 sm:p-8 sm:p-12">
         {/* Title and Congratulations */}
         <div className="text-center mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-primary-600 mb-2">{t('title')}</h1>
@@ -139,7 +139,7 @@ export function ResultsCard({
         {/* New Record Celebration */}
         {hasNewRecord && (
           <div className="mb-8 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl border-2 border-yellow-200">
-            <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
               <Trophy size={40} className="animate-bounce" />
               <span className="text-2xl sm:text-3xl font-bold text-yellow-600">
                 {t('newRecord')}
@@ -201,10 +201,10 @@ export function ResultsCard({
               <div className="bg-gray-50 rounded-xl p-4">
                 <ul className="space-y-2">
                   {wordsNotFirstTry.map((word) => (
-                    <li key={word.id} className="flex justify-between items-center text-gray-700">
-                      <span className="font-medium">{word.prompt}</span>
-                      <span className="text-gray-500">→</span>
-                      <span className="text-primary-600">{word.answer}</span>
+                    <li key={word.id} className="flex justify-between items-center text-gray-700 gap-2">
+                      <span className="font-medium min-w-0 truncate">{word.prompt}</span>
+                      <span className="text-gray-500 shrink-0">→</span>
+                      <span className="text-primary-600 min-w-0 truncate text-right">{word.answer}</span>
                     </li>
                   ))}
                 </ul>

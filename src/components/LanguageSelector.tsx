@@ -23,7 +23,7 @@ export default function LanguageSelector() {
     <div className="flex items-center gap-2">
       <label
         htmlFor="language-select"
-        className="text-sm font-medium text-gray-700"
+        className="hidden sm:inline text-sm font-medium text-gray-700"
       >
         {t("label")}:
       </label>
@@ -31,7 +31,7 @@ export default function LanguageSelector() {
         id="language-select"
         value={locale}
         onChange={(e) => handleLocaleChange(e.target.value)}
-        className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900 cursor-pointer"
+        className="min-h-[44px] px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900 cursor-pointer"
         aria-label={t("label")}
       >
         {locales.map((loc) => (

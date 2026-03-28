@@ -166,8 +166,8 @@ export const WordListUpload = React.forwardRef<HTMLDivElement, WordListUploadPro
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
             </div>
-            <p className="text-lg font-medium text-gray-700 mb-2">{t('dragDrop')}</p>
-            <p className="text-base text-gray-500 mb-4">{t('or')}</p>
+            <p className="text-lg font-medium text-gray-700 mb-2 hidden sm:block">{t('dragDrop')}</p>
+            <p className="text-base text-gray-500 mb-4 hidden sm:block">{t('or')}</p>
             <Button variant="primary" size="lg" onClick={handleButtonClick} disabled={status === 'loading'}>
               {status === 'loading' ? tCommon('loading') : t('chooseFile')}
             </Button>
@@ -224,10 +224,10 @@ export const WordListUpload = React.forwardRef<HTMLDivElement, WordListUploadPro
                 <h4 className="text-base font-medium text-gray-700 mb-3">{t('preview')}</h4>
                 <div className="space-y-2">
                   {words.slice(0, 5).map((word) => (
-                    <div key={word.id} className="flex items-center justify-between bg-white rounded px-3 py-2 text-base">
-                      <span className="font-medium text-gray-800">{word.prompt}</span>
-                      <span className="text-gray-400 mx-2">→</span>
-                      <span className="text-gray-600">{word.answer}</span>
+                    <div key={word.id} className="flex items-center justify-between bg-white rounded px-3 py-2 text-base gap-2">
+                      <span className="font-medium text-gray-800 min-w-0 truncate">{word.prompt}</span>
+                      <span className="text-gray-400 mx-2 shrink-0">→</span>
+                      <span className="text-gray-600 min-w-0 truncate text-right">{word.answer}</span>
                     </div>
                   ))}
                   {words.length > 5 && (

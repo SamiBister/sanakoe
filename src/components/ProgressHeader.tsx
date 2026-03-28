@@ -85,11 +85,11 @@ export function ProgressHeader({
 
   return (
     <div
-      className={`flex flex-wrap items-center justify-center gap-6 sm:gap-8 p-4 bg-white rounded-2xl shadow-md ${className}`}
+      className={`w-full flex flex-wrap items-center justify-center gap-3 sm:gap-6 p-4 bg-white rounded-2xl shadow-md ${className}`}
     >
       {/* Progress */}
       <div className="flex items-center gap-2">
-        <span className="text-gray-600 text-lg font-medium">
+        <span className="text-gray-600 text-base sm:text-lg font-medium">
           {t('progress', { resolved, total })}
         </span>
       </div>
@@ -99,7 +99,7 @@ export function ProgressHeader({
 
       {/* Tries */}
       <div className="flex items-center gap-2">
-        <span className="text-gray-600 text-lg font-medium">
+        <span className="text-gray-600 text-base sm:text-lg font-medium">
           {t('tries', { count: tries })}
         </span>
       </div>
@@ -109,7 +109,7 @@ export function ProgressHeader({
 
       {/* Timer */}
       <div className="flex items-center gap-2">
-        <span className="text-gray-600 text-lg font-medium">
+        <span className="text-gray-600 text-base sm:text-lg font-medium">
           {t('time')}: <span className="font-bold text-primary-600">{formatTime(elapsedMs)}</span>
         </span>
       </div>

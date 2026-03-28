@@ -116,7 +116,7 @@ export function QuizCard({
 
   return (
     <Card className={`max-w-2xl w-full ${className}`}>
-      <CardBody className="p-8 sm:p-12">
+      <CardBody className="p-4 sm:p-8 sm:p-12">
         {/* Feedback: Correct Answer */}
         {feedback === 'correct' && (
           <div className="text-center mb-8 animate-fade-in">
@@ -137,7 +137,7 @@ export function QuizCard({
             </h2>
             <div className="bg-orange-50 rounded-xl p-6 mb-4">
               <p className="text-lg text-gray-700 mb-2">{t('correctAnswerIs')}</p>
-              <p className="text-3xl sm:text-4xl font-bold text-orange-600">{correctAnswer}</p>
+              <p className="text-2xl sm:text-3xl sm:text-4xl font-bold text-orange-600 break-words">{correctAnswer}</p>
             </div>
           </div>
         )}
@@ -149,7 +149,7 @@ export function QuizCard({
               <label htmlFor="answer-input" className="block text-lg text-gray-600 mb-3">
                 {t('promptLabel')}
               </label>
-              <h2 className="text-4xl sm:text-5xl font-bold text-primary-600 mb-6">{prompt}</h2>
+              <h2 className="text-2xl sm:text-4xl sm:text-5xl font-bold text-primary-600 mb-6 break-words">{prompt}</h2>
             </div>
 
             {/* Answer Input */}
@@ -165,7 +165,7 @@ export function QuizCard({
                   placeholder={t('yourAnswer')}
                   disabled={disabled}
                   inputSize="lg"
-                  className="text-center text-2xl"
+                  className="text-center text-xl sm:text-2xl"
                   autoComplete="off"
                 />
               </div>
@@ -176,7 +176,7 @@ export function QuizCard({
                   variant="primary"
                   size="lg"
                   disabled={!answer.trim() || disabled}
-                  className="text-2xl py-6 px-12 min-w-[200px]"
+                  className="w-full text-xl sm:text-2xl sm:py-6 sm:px-12 sm:min-w-[200px]"
                 >
                   {t('submit')}
                 </Button>
