@@ -119,7 +119,11 @@
     },
     "current": "(current)",
     "empty": "No words loaded yet",
-    "close": "Close"
+    "close": "Close",
+    "export": "Export CSV",
+    "columnWord": "Word",
+    "columnTranslation": "Translation",
+    "columnStatus": "Status"
   },
   "language": {
     "label": "Language",

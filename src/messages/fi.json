@@ -119,7 +119,11 @@
     },
     "current": "(nykyinen)",
     "empty": "Ei sanoja ladattu vielä",
-    "close": "Sulje"
+    "close": "Sulje",
+    "export": "Vie CSV",
+    "columnWord": "Sana",
+    "columnTranslation": "Käännös",
+    "columnStatus": "Tila"
   },
   "language": {
     "label": "Kieli",

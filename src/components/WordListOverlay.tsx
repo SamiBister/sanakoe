@@ -121,13 +121,33 @@ export const WordListOverlay: React.FC<WordListOverlayProps> = ({
     }
   }, [words, filter]);
 
-  const handleOpen = useCallback(() => {
-    setIsOpen(true);
-  }, []);
+  const handleOpen = useCallback(() => setIsOpen(true), []);
+  const handleClose = useCallback(() => setIsOpen(false), []);
 
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+  const handleExport = useCallback(() => {
+    // Build CSV from the full word list (all words, not just filtered)
+    const rows = words.map((word) => {
+      const status = word.resolved
+        ? t('status.resolved')
+        : word.firstTryFailed
+          ? t('status.mistake')
+          : t('status.unresolved');
+      // Wrap fields in quotes to handle commas inside values
+      const escape = (s: string) => `"${s.replace(/"/g, '""')}"`;
+      return `${escape(word.prompt)},${escape(word.answer)},${escape(status)}`;
+    });
+
+    const header = `${t('columnWord')},${t('columnTranslation')},${t('columnStatus')}`;
+    const csv = [header, ...rows].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'sanakoe.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [words, t]);
 
   // Don't render button if no words loaded
   if (words.length === 0) {
@@ -155,7 +175,10 @@ export const WordListOverlay: React.FC<WordListOverlayProps> = ({
         closeOnEsc={true}
         closeOnOverlayClick={true}
         footer={
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center">
+            <Button variant="secondary" onClick={handleExport}>
+              ⬇️ {t('export')}
+            </Button>
             <Button variant="secondary" onClick={handleClose}>
               {tCommon('close')}
             </Button>
@@ -212,19 +235,19 @@ export const WordListOverlay: React.FC<WordListOverlayProps> = ({
                       scope="col"
                       className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
                     >
-                      {t('status.resolved').replace('Resolved', 'Status')}
+                      {t('columnStatus')}
                     </th>
                     <th
                       scope="col"
                       className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
                     >
-                      Prompt
+                      {t('columnWord')}
                     </th>
                     <th
                       scope="col"
                       className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
                     >
-                      Answer
+                      {t('columnTranslation')}
                     </th>
                   </tr>
                 </thead>
