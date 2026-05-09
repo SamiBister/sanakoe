@@ -40,7 +40,7 @@ function detectDelimiter(firstLine: string): "," | ";" {
  * @returns true if the row appears to be a header
  */
 function isHeaderRow(cells: string[]): boolean {
-  if (cells.length !== 2) return false;
+  if (cells.length < 2) return false;
 
   const [first, second] = cells.map((c) => c.toLowerCase().trim());
 
@@ -67,7 +67,7 @@ function isHeaderRow(cells: string[]): boolean {
     "target",
   ];
 
-  // Check if either cell matches common header patterns
+  // Check if either of the first two cells matches common header patterns
   const matchesPattern = headerPatterns.some(
     (pattern) => first.includes(pattern) || second.includes(pattern),
   );
@@ -193,10 +193,7 @@ export function parseCSV(content: string): WordItem[] {
     }
 
     if (cells.length > 2) {
-      // More than 2 columns - use first two and ignore rest
-      console.warn(
-        `Line ${i + 1}: Found ${cells.length} columns, using first two only`,
-      );
+      // More than 2 columns - use first two and ignore rest (e.g. status column from export)
     }
 
     const [prompt, answer] = cells;
